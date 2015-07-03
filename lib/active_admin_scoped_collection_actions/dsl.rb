@@ -11,21 +11,13 @@ module ActiveAdminScopedCollectionActions
                     (authorized?(:batch_edit, resource_class) || authorized?(:batch_destroy, resource_class))
               }, class: 'sidebar_batch_actions_by_filters' do
 
-        para 'This batch operations affect all records involved by current filters and scopes'
+        para 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
 
-        button 'Edit', {
-                         class: :show_form_mass_fields_update,
-                         data: {
-                             inputs: options[:inputs].call,
-                             auth_token: form_authenticity_token.to_s
-                         }.to_json
-                     }
-
-        button_to 'Delete',
-                  { action: 'batch_action', q: params[:q], scope: params[:scope] },
-                  { params: { batch_action: 'batch_destroy' },
-                    method: :post,
-                    data: { confirm: 'Are you sure?', disable_with: 'Loading...' } }
+        button 'Edit', { class: :show_form_mass_fields_update,
+                         data: { inputs: options[:inputs].call,
+                                 auth_token: form_authenticity_token.to_s }.to_json }
+        button 'Delete', { class: :aa_scoped_collection_destroy,
+                           data: { auth_token: form_authenticity_token.to_s }.to_json }
       end
 
 
