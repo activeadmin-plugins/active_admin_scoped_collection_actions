@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'active_admin_scoped_collection_actions/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ActiveAdmin scoped_collection actions"
+  spec.name          = "active_admin_scoped_collection_actions"
   spec.version       = ActiveAdminScopedCollectionActions::VERSION
   spec.authors       = ["Gena M."]
   spec.email         = ["workgena@gmail.com"]

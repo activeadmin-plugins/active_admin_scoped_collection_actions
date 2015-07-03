@@ -1,0 +1,26 @@
+.active_admin_dialog_mass_update_by_filter {
+  form {
+    overflow-y: scroll;
+
+    label {
+      display: block;
+      margin-bottom: 2px;
+    }
+    input[type=text], input[type=datepicker] {
+      width: calc(100% - 20px);
+      padding: 8px 10px 7px;
+    }
+    select {
+      width: 100%;
+    }
+  }
+}
+
+.sidebar_batch_actions_by_filters {
+  .button_to {
+    display: inline;
+    &>div {
+      display: inline;
+    }
+  }
+}
