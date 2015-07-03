@@ -2,9 +2,13 @@
   form {
     overflow-y: scroll;
 
-    label {
+    li {
       display: block;
-      margin-bottom: 2px;
+      margin: 10px 0 0 0;
+    }
+    input[type=text], input[type=datepicker], select {
+      margin-top: 3px;
+      display: block;
     }
     input[type=text], input[type=datepicker] {
       width: calc(100% - 20px);
@@ -17,10 +21,7 @@
 }
 
 .sidebar_batch_actions_by_filters {
-  .button_to {
-    display: inline;
-    &>div {
-      display: inline;
-    }
+  button {
+    cursor: pointer;
   }
 }
