@@ -1,7 +1,5 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'active_admin_scoped_collection_actions/version'
+require File.expand_path('../lib/active_admin_scoped_collection_actions/version', __FILE__)
 
 Gem::Specification.new do |spec|
   spec.name          = "active_admin_scoped_collection_actions"
@@ -9,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Gena M."]
   spec.email         = ["workgena@gmail.com"]
 
-  spec.summary       = %q{ActiveAdmin scoped_collection actions}
+  spec.summary       = %q{scoped_collection actions extension for ActiveAdmin}
   spec.description   = %q{Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (Filters + Scope) across all pages.}
   spec.homepage      = "https://github.com/workgena/active_admin_scoped_collection_actions"
   spec.license       = "MIT"

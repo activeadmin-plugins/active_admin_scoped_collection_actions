@@ -20,7 +20,12 @@ function aa_scoped_collection_actions_post_to_url(path, params, method)
         if(typeof(params[key]) == 'object') {
             var params2 = params[key];
             for(var key2 in params2) {
-                form.appendChild(create_hidden_fields('changes[' + key2 + ']', params2[key2]));
+                if($.isArray(params[key])) {
+                    input_name = key + '[]'
+                } else {
+                    input_name = key + '[' + key2 + ']'
+                }
+                form.appendChild(create_hidden_fields(input_name, params2[key2]));
             }
         } else if(params.hasOwnProperty(key)) {
             form.appendChild(create_hidden_fields(key, params[key]));
