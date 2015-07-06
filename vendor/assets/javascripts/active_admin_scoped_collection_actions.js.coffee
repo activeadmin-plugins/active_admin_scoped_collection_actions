@@ -1,4 +1,3 @@
-#= require ./lib/aa_scoped_collection_actions_post_to_url
 #= require ./lib/dialog_mass_fields_update
 
 $(document).ready ->
@@ -14,10 +13,11 @@ $(document).ready ->
       }
       $('.paginated_collection').find('input.collection_selection:checked').each (i, el) ->
         form_data["collection_selection"].push($(el).val())
-      aa_scoped_collection_actions_post_to_url(url, form_data)
+      $.post(url, form_data).always () ->
+        window.location.reload()
 
 
-  $('.show_form_mass_fields_update').click (e)->
+  $('.show_form_mass_fields_update').click (e) ->
     e.preventDefault()
     fields = JSON.parse( $(this).attr('data') )
 
@@ -33,4 +33,5 @@ $(document).ready ->
         $('.paginated_collection').find('input.collection_selection:checked').each (i, el) ->
           form_data["collection_selection"].push($(el).val())
 
-        aa_scoped_collection_actions_post_to_url(url, form_data)
+        $.post(url, form_data).always () ->
+          window.location.reload()

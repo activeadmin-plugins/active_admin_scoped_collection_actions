@@ -24,10 +24,11 @@ module ActiveAdminScopedCollectionActions
       batch_action :batch_update, if: proc { false } do |selection, _|
         collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
         unless authorized?(:batch_edit, resource_class)
-          redirect_to(:back, flash: {error: 'Access denied'}) and next
+          flash[:error] = 'Access denied'
+          render nothing: true, status: :no_content and next
         end
         if !params.has_key?(:changes) || params[:changes].empty?
-          redirect_to :back and next
+          render nothing: true, status: :no_content and next
         end
         permitted_changes = params.require(:changes).permit( *(options[:inputs].call.keys) )
         errors = []
@@ -42,14 +43,15 @@ module ActiveAdminScopedCollectionActions
         else
           flash[:error] = errors.join(". ")
         end
-        redirect_to :back
+        render nothing: true, status: :no_content
       end
 
 
       batch_action :batch_destroy, if: proc { false } do |selection, _|
         collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
         unless authorized?(:batch_destroy, resource_class)
-          redirect_to(:back, flash: {error: 'Access denied'}) and next
+          flash[:error] = 'Access denied'
+          render nothing: true, status: :no_content and next
         end
         errors = []
         collection.find_in_batches do |group|
@@ -63,8 +65,7 @@ module ActiveAdminScopedCollectionActions
         else
           flash[:error] = errors.join(". ")
         end
-
-        redirect_to :back
+        render nothing: true, status: :no_content
       end
 
     end
