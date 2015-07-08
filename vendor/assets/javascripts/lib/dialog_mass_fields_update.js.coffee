@@ -3,8 +3,6 @@ ActiveAdmin.dialog_mass_fields_update = (message, inputs, callback)->
   for name, type of inputs
     if /^(datepicker|checkbox|text)$/.test type
       wrapper = 'input'
-    else if type is 'textarea'
-      wrapper = 'textarea'
     else if $.isArray type
       [wrapper, elem, opts, type] = ['select', 'option', type, '']
     else

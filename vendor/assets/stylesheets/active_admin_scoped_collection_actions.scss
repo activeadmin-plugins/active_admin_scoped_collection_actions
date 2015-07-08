@@ -18,10 +18,17 @@
       width: 100%;
     }
   }
-}
-
-.sidebar_batch_actions_by_filters {
   button {
     cursor: pointer;
+  }
+}
+
+.sidebar_section.panel {
+  .scoped_collection_action_button {
+    cursor: pointer;
+    margin: 10px 5px 0 0;
+    &:last-child {
+      margin-right: 0;
+    }
   }
 }

@@ -1,26 +1,21 @@
 module ActiveAdminScopedCollectionActions
   module DSL
 
-    def filtered_actions(options)
-
-      sidebar 'Batch operations',
-              only: [:index],
-              if: proc {
-                active_admin_config.batch_actions.any? &&
-                    (params[:q] || params[:scope]) &&
-                    (authorized?(:batch_edit, resource_class) || authorized?(:batch_destroy, resource_class))
-              }, class: 'sidebar_batch_actions_by_filters' do
-
-        para 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
-
-        button 'Edit', { class: :show_form_mass_fields_update,
-                         data: { inputs: options[:inputs].call,
-                                 auth_token: form_authenticity_token.to_s }.to_json }
-        button 'Delete', { class: :aa_scoped_collection_destroy,
-                           data: { auth_token: form_authenticity_token.to_s }.to_json }
+    def scoped_collection_action(name, options = {}, &block)
+      # controller
+      if name == :batch_destroy
+        add_scoped_collection_action_default_destroy(name, options, &block)
+      elsif name == :batch_update
+        add_scoped_collection_action_default_update(name, options, &block)
+      else
+        batch_action(name, if: proc { false }, &block)
       end
+      # sidebar button
+      config.add_scoped_collection_action(name, options)
+    end
 
 
+    def add_scoped_collection_action_default_update(name, options, &block)
       batch_action :batch_update, if: proc { false } do |selection, _|
         collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
         unless authorized?(:batch_edit, resource_class)
@@ -30,7 +25,7 @@ module ActiveAdminScopedCollectionActions
         if !params.has_key?(:changes) || params[:changes].empty?
           render nothing: true, status: :no_content and next
         end
-        permitted_changes = params.require(:changes).permit( *(options[:inputs].call.keys) )
+        permitted_changes = params.require(:changes).permit( *(options[:form].call.keys) )
         errors = []
         collection.find_in_batches do |group|
           group.each do |record|
@@ -45,9 +40,11 @@ module ActiveAdminScopedCollectionActions
         end
         render nothing: true, status: :no_content
       end
+    end
 
 
-      batch_action :batch_destroy, if: proc { false } do |selection, _|
+    def add_scoped_collection_action_default_destroy(name, _, &block)
+      batch_action :batch_destroy, if: proc { false } do |selection|
         collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
         unless authorized?(:batch_destroy, resource_class)
           flash[:error] = 'Access denied'
@@ -67,7 +64,6 @@ module ActiveAdminScopedCollectionActions
         end
         render nothing: true, status: :no_content
       end
-
     end
 
   end
