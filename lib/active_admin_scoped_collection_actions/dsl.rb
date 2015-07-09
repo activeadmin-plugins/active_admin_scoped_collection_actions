@@ -17,7 +17,7 @@ module ActiveAdminScopedCollectionActions
 
     def add_scoped_collection_action_default_update(name, options, &block)
       batch_action :batch_update, if: proc { false } do |selection, _|
-        collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
+        collection = selection.any? ? resource_class.where(resource_class.primary_key => selection) : batch_action_collection
         unless authorized?(:batch_edit, resource_class)
           flash[:error] = 'Access denied'
           render nothing: true, status: :no_content and next
@@ -28,7 +28,7 @@ module ActiveAdminScopedCollectionActions
         permitted_changes = params.require(:changes).permit( *(options[:form].call.keys) )
         errors = []
         collection.find_each do |record|
-          errors << "#{record.id} | #{record.errors.full_messages.join('. ')}" unless update_resource(record, [permitted_changes])
+          errors << "#{record.attributes[resource_class.primary_key]} | #{record.errors.full_messages.join('. ')}" unless update_resource(record, [permitted_changes])
         end
         if errors.empty?
           flash[:notice] = 'Batch update done'
@@ -42,14 +42,14 @@ module ActiveAdminScopedCollectionActions
 
     def add_scoped_collection_action_default_destroy(name, _, &block)
       batch_action :batch_destroy, if: proc { false } do |selection|
-        collection = selection.any? ? resource_class.where(id: selection) : batch_action_collection
+        collection = selection.any? ? resource_class.where(resource_class.primary_key => selection) : batch_action_collection
         unless authorized?(:batch_destroy, resource_class)
           flash[:error] = 'Access denied'
           render nothing: true, status: :no_content and next
         end
         errors = []
         collection.find_each do |record|
-          errors << "#{record.id} | Cant be destroyed}" unless destroy_resource(record)
+          errors << "#{record.attributes[resource_class.primary_key]} | Cant be destroyed}" unless destroy_resource(record)
         end
         if errors.empty?
           flash[:notice] = 'Batch destroy done'
