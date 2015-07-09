@@ -27,11 +27,8 @@ module ActiveAdminScopedCollectionActions
         end
         permitted_changes = params.require(:changes).permit( *(options[:form].call.keys) )
         errors = []
-        collection.find_in_batches do |group|
-          group.each do |record|
-            res = update_resource(record, [permitted_changes])
-            errors << "#{record.id} | #{record.errors.full_messages.join('. ')}" unless res
-          end
+        collection.find_each do |record|
+          errors << "#{record.id} | #{record.errors.full_messages.join('. ')}" unless update_resource(record, [permitted_changes])
         end
         if errors.empty?
           flash[:notice] = 'Batch update done'
@@ -51,11 +48,8 @@ module ActiveAdminScopedCollectionActions
           render nothing: true, status: :no_content and next
         end
         errors = []
-        collection.find_in_batches do |group|
-          group.each do |record|
-            res = destroy_resource(record)
-            errors << "#{record.id} | Cant be destroyed}" unless res
-          end
+        collection.find_each do |record|
+          errors << "#{record.id} | Cant be destroyed}" unless destroy_resource(record)
         end
         if errors.empty?
           flash[:notice] = 'Batch destroy done'
