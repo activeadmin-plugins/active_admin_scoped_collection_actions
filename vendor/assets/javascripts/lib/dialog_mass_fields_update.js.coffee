@@ -1,4 +1,4 @@
-ActiveAdmin.dialog_mass_fields_update = (message, inputs, callback)->
+ActiveAdmin.dialogMassFieldsUpdate = (message, inputs, callback)->
   html = """<form id="dialog_confirm" title="#{message}"><div stype="padding-right:4px;padding-left:1px;margin-right:2px"><ul>"""
   for name, type of inputs
     if /^(datepicker|checkbox|text)$/.test type

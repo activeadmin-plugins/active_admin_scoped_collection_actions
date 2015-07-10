@@ -6,7 +6,7 @@ $(document).ready ->
     e.preventDefault()
     fields = JSON.parse( $(this).attr('data') )
 
-    ActiveAdmin.dialog_mass_fields_update fields['confirm'], fields['inputs'],
+    ActiveAdmin.dialogMassFieldsUpdate fields['confirm'], fields['inputs'],
       (inputs)=>
         url = window.location.pathname + '/batch_action' + window.location.search
         form_data = {

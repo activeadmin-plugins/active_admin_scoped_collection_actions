@@ -140,6 +140,19 @@ In you resource set configuration
 config.scoped_collection_actions_on_all = true
 ```
 
+### Can I use my handler on update/delete action?
+
+You can pass block to default actions update and delete.
+
+```ruby
+  # Delte absolutely all
+  scoped_collection_action :scoped_collection_destroy do
+    Phone.all.delete_all
+    render nothing: true, status: :no_content
+  end
+```
+
+
 ### How can I rename button ?
 
 Every scoped_collection_action has option :title. Example:

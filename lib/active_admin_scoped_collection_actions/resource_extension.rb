@@ -26,17 +26,30 @@ module ActiveAdminScopedCollectionActions
       self.sidebar_sections << scoped_collection_actions_sidebar_section
     end
 
-    def scoped_collection_actions_sidebar_section
-      condition = -> do
-        filtered_scoped = (params[:q] || params[:scope])
-        on_all = active_admin_config.scoped_collection_actions_on_all
-        has_actions = active_admin_config.scoped_collection_actions.any?
-        batch_actions_enabled = active_admin_config.batch_actions_enabled?
+    def scoped_collection_actions_if=(if_proc)
+      @if_proc = if_proc
+    end
 
-        ( batch_actions_enabled && has_actions && (filtered_scoped || on_all) )
+    def scoped_collection_actions_if
+      @if_proc
+    end
+
+    def scoped_collection_sidebar_condition
+      -> do
+        if active_admin_config.scoped_collection_actions_if.is_a?(Proc)
+          instance_exec &active_admin_config.scoped_collection_actions_if
+        else
+          filtered_scoped = (params[:q] || params[:scope])
+          on_all = active_admin_config.scoped_collection_actions_on_all
+          has_actions = active_admin_config.scoped_collection_actions.any?
+          batch_actions_enabled = active_admin_config.batch_actions_enabled?
+          ( batch_actions_enabled && has_actions && (filtered_scoped || on_all) )
+        end
       end
+    end
 
-      ActiveAdmin::SidebarSection.new :collection_actions, only: :index, if: condition do
+    def scoped_collection_actions_sidebar_section
+      ActiveAdmin::SidebarSection.new :collection_actions, only: :index, if: scoped_collection_sidebar_condition do
 
         div 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
 
