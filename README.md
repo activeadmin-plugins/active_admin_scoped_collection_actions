@@ -11,7 +11,7 @@ This gem give you ability to perform various batch actions on any filtered(or sc
 Add gem to you "Gemfile"
 
 ```ruby
-gem 'active_admin_scoped_collection_actions', github: 'workgena/active_admin_scoped_collection_actions'
+gem 'active_admin_scoped_collection_actions', github: 'activeadmin-plugins/active_admin_scoped_collection_actions'
 ```
 
 Then in linux console run:
