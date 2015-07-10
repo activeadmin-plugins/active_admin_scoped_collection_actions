@@ -1,4 +1,4 @@
-# ActiveAdmin Scoped Collection Actions
+f# ActiveAdmin Scoped Collection Actions
 Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (Filters + Scope) across all pages.
 
 ![Step 1](/screenshots/sidebar.png)
@@ -133,6 +133,15 @@ You resource should have some collection actions. If it doesn't have any - sideb
 And the last one. By default we dont allow perform actions on all the records. We want protect you from accidental deleting.
 Sidebar with buttons will appear only after you perform filtering or scopes on  resource records
 
+And lastly you can manage sidebar visibility by resource config:
+
+```ruby
+# Always
+config.scoped_collection_actions_if = -> { true }
+# Only for scopes
+config.scoped_collection_actions_if = -> { params[:scope] }
+# etc.
+```
 
 ### Can I use my handler on update/delete action?
 
