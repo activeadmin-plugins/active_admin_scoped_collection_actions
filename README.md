@@ -84,7 +84,7 @@ In this example Phone model has fields:
  * vendor_id - association "belongs_to :vendor, class_name: 'Vendor', foreign_key: :vendor_id"
  * has_3g - boolean
 
-Parameter "form" is a proc object which returns Hash. It defines what fields you want to be able to update. Hash keys are  column names in database. Hash values are a types of HTML inputs. Now we only support ""text", "datepicker" and "selectbox". If you want something more complex - you can build you own forms.
+Parameter "form" is a proc object which returns Hash. It defines what fields you want to be able to update. Hash keys are  column names in database. Hash values are a types of HTML inputs. We support only "text", "datepicker" and "selectbox". If you want something more complex - you can build your own forms.
 
 # Custom Actions
 
@@ -106,7 +106,7 @@ ActiveAdmin.register Phone do
 end
 ```
 
-This simple code will create new button in sidebar "Erase date". After clicking this button user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
+This simple code will create new button in sidebari "Erase date". After clicking on this button, user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
 
 
 # Details and Settings
@@ -122,17 +122,16 @@ First you must set
 config.batch_actions = true
 ```
 
-Inside of this Gem we use "batch_actions". So without them Collection Actions don't work.
+Actually inside of this Gem we use "batch_actions". So without them Collection Actions wouldn't work.
 
 ```ruby
 scoped_collection_action :something_here
 ```
 
-You resource should have some collection actions. If it doesn't have, sidebar will not appear.
+You resource should have some collection actions. If it doesn't have any - sidebar will not appear.
 
 And the last one. By default we dont allow perform actions on all the records. We want protect you from accidental deleting.
-Sidebar with buttons will appear only when you performing filtering or scopes on  resource records
-
+Sidebar with buttons will appear only after you perform filtering or scopes on  resource records
 
 
 ### Can I use my handler on update/delete action?
@@ -150,7 +149,8 @@ You can pass block to default actions update and delete.
 
 ### How can I rename button ?
 
-Every scoped_collection_action has option :title. Example:
+Every scoped_collection_action has option :title.
+Example:
 
 ```ruby
   scoped_collection_action :erase_date, title: 'Nullify' do
@@ -170,7 +170,7 @@ Similar to button title. User option :confirm
 
 ### Can I replace you pop-up form with my own?
 
-Yes. But also you must take care of required parameters passed to server.
+Yes. But also you must take care of mandatory parameters passed to server.
 
 
 ```ruby
@@ -185,20 +185,20 @@ Now in HTML page, you have button:
 
 But without handler. Click on the button do nothing.
 
-You can render  form in any way you want.
+You can render form in any way you want.
 It can be some popup(Fancybox, Simplemodal, etc.), or some inline collapsible form.
-It can even be a complex full-page.
+It can even be a separate full-page.
 
-One thing is important. How you will send data to server. Generally it should be:
+One thing is important - how you will send data to server. Generally it should be:
 
 
-POST request on url
+POST request
 
-/admin/collection_path/batch_action
+URL: /admin/collection_path/batch_action
 
-with GET params identical to current scoped/filtered collection
+with GET params identical to current page
 
-The easiest way to get it is:
+The easiest way to get them is:
 
 ```javascript
 url = window.location.pathname + '/batch_action' + window.location.search
@@ -209,6 +209,7 @@ And Request body params should be like:
 ```
 changes[manufactured_at] = "2015-07-21 18:11"
 changes[diagonal] = "7"
+changes[some_filed_name]='new value'
 authenticity_token = "2a+KLu5u9McQENspCiep0DGZI6D09fCVXAN9inrwRG0="
 batch_action = "my_pop_action"
 ```
@@ -264,3 +265,18 @@ Diagonal must be an integer.
 ```
 
 But if you use you custom popup, you can show messages with JS.
+
+
+### Can I perform action only on selected items?
+
+Standard index-page of a resource with bathc_action enabled has selectable column.
+
+If you checked some items and parform any Collection Action, the handler will take care of it. If you write custom actions, you should do like this:
+
+```ruby
+  scoped_collection_action :do_something do
+    scoped_collection_records.find_each do |record|
+      record.update(name: 'x')
+    end
+  end
+```
