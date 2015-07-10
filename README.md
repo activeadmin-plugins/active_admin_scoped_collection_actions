@@ -1,6 +1,10 @@
 # ActiveAdmin Scoped Collection Actions
 Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (Filters + Scope) across all pages.
 
+![Step 1](/screenshots/sidebar.png)
+
+![Step 1](/screenshots/pupup.png)
+
 
 # Description
 
