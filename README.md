@@ -60,7 +60,7 @@ ActiveAdmin.register Post do
 end
 ```
 
-Important thing. Go to you browser page Posts. And you would not see any changes. Now in sidebar Filters - filter posts by any parameter. Only after that you will se delete button. It will be in sidebar under Filters.
+Important thing. Visit Posts page with your browser. And you will see no changes. Now  perform any filter with Filters sidebar. Only after that you will see delete button. It will be in sidebar under Filters.
 
 ### Update action
 
@@ -77,18 +77,18 @@ Update is second standart action. It is more complex. It has "form" hash wrapped
                                         end
 ```
 
-In this example Phone-model has fields:
+In this example Phone model has fields:
  * name - varchar string
  * diagonal - integer(of float)
  * manufactured_at - datetime
  * vendor_id - association "belongs_to :vendor, class_name: 'Vendor', foreign_key: :vendor_id"
  * has_3g - boolean
 
-Parameter "form" is an Hash wrapped in Proc. It defines what fields you want to be able to update. Hash-Key is a fields name in database. Hash-Value is a type of HTML-input. Now we only support ""text", "datepicer" and "selecbox". It you want something more complex - you can build you own forms.
+Parameter "form" is a proc object which returns Hash. It defines what fields you want to be able to update. Hash keys are  column names in database. Hash values are a types of HTML inputs. Now we only support ""text", "datepicker" and "selectbox". If you want something more complex - you can build you own forms.
 
 # Custom Actions
 
-Example. We have Phone resource. It has field "manufactured_at". And we need action which will erase this date.
+Example. We have Phone resource. It has column "manufactured_at". And we need action which will erase this date.
 
 In ActiveAdmin resource
 
@@ -97,7 +97,7 @@ ActiveAdmin.register Phone do
   config.batch_actions = true
 
   scoped_collection_action :erase_date do
-    batch_action_collection.update_all(manufactured_at: nil)
+    scoped_collection_records.update_all(manufactured_at: nil)
   end
 
   index do
@@ -106,7 +106,7 @@ ActiveAdmin.register Phone do
 end
 ```
 
-This simple code will create new button in sidebar "Erase date". When user press it hi will see confirm message "Are you sure?". If click OK - than page reloads and erase date in all filtered records.
+This simple code will create new button in sidebar "Erase date". After clicking this button user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
 
 
 # Details and Settings
@@ -122,23 +122,18 @@ First you must set
 config.batch_actions = true
 ```
 
-Inside of thi Gem we use "batch_actions". So without tem Collection Actions don't work.
+Inside of this Gem we use "batch_actions". So without them Collection Actions don't work.
 
 ```ruby
 scoped_collection_action :something_here
 ```
 
-You resource should have some collection actions. It it don't have any - sidebar will not render.
+You resource should have some collection actions. If it doesn't have, sidebar will not appear.
 
 And the last one. By default we dont allow perform actions on all the records. We want protect you from accidental deleting.
-Sidebar with buttons will appear only when you Filtering or Scoping resource items.
+Sidebar with buttons will appear only when you performing filtering or scopes on  resource records
 
-But, if you prefer, you can allow your admins to perform Collection Actions over all the resource records.
-In you resource set configuration
 
-```ruby
-config.scoped_collection_actions_on_all = true
-```
 
 ### Can I use my handler on update/delete action?
 
@@ -190,11 +185,11 @@ Now in HTML page, you have button:
 
 But without handler. Click on the button do nothing.
 
-You can render you form in any way you want.
+You can render  form in any way you want.
 It can be some popup(Fancybox, Simplemodal, etc.), or some inline collapsible form.
 It can even be a complex full-page.
 
-One thin is important. How you will send data to server. Generally it should be:
+One thing is important. How you will send data to server. Generally it should be:
 
 
 POST request on url
@@ -209,14 +204,16 @@ The easiest way to get it is:
 url = window.location.pathname + '/batch_action' + window.location.search
 ```
 
-And Request body paras should be like:
+And Request body params should be like:
 
+```
 changes[manufactured_at] = "2015-07-21 18:11"
-changes[diagoanl] = "7"
+changes[diagonal] = "7"
 authenticity_token = "2a+KLu5u9McQENspCiep0DGZI6D09fCVXAN9inrwRG0="
 batch_action = "my_pop_action"
+```
 
-authenticity_token and batch_action you can get from data-attribute of the Button.
+```authenticity_token``` and ```batch_action``` you can get from data-attribute of the Button.
 
 
 Example in JavaScript
@@ -237,7 +234,7 @@ Example in JavaScript
 
 We recommend to use Rails Flash messages.
 
-Example with Erasing phone diagonal. In this case you Phone-model has validation:
+Example with erasing phone diagonal. In this case you Phone-model has validation:
 
 ```ruby
   class Phone < ActiveRecord::Base
