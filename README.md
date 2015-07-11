@@ -278,7 +278,7 @@ But if you use you custom popup, you can show messages with JS.
 
 ### Can I perform action only on selected items?
 
-Standard index-page of a resource with bathc_action enabled has selectable column.
+Standard index-page of a resource with batch_action enabled has selectable column.
 
 If you checked some items and parform any Collection Action, the handler will take care of it. If you write custom actions, you should do like this:
 
