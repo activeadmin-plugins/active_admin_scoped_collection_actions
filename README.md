@@ -12,19 +12,19 @@ This gem give you ability to perform various batch actions on any filtered(or sc
 
 # Install
 
-Add gem to you "Gemfile"
+Add this line to your application's Gemfile:
 
 ```ruby
 gem 'active_admin_scoped_collection_actions', github: 'activeadmin-plugins/active_admin_scoped_collection_actions'
 ```
 
-Then in linux console run:
+And then execute:
 
 ```
 $ bundle
 ```
 
-Add the following line at the end of "app/assets/javascript/active_admin.js.coffee"
+Add the following line at the end of "app/assets/javascript/active_admin.js.coffee":
 
 ```javascript
 //= require active_admin_scoped_collection_actions
