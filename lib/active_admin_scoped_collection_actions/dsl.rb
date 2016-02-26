@@ -26,24 +26,22 @@ module ActiveAdminScopedCollectionActions
           render nothing: true, status: :no_content and next
         end
         permitted_changes = params.require(:changes).permit(*(options[:form].call.keys))
-        errors = []
         if block_given?
-          begin
-            instance_eval &block
-          rescue Exception => e
-            errors << e
-          end
+          instance_eval &block
         else
+          errors = []
           scoped_collection_records.find_each do |record|
-            errors << "#{record.attributes[resource_class.primary_key]} | #{record.errors.full_messages.join('. ')}" unless update_resource(record, [permitted_changes])
+            unless update_resource(record, [permitted_changes])
+              errors << "#{record.attributes[resource_class.primary_key]} | #{record.errors.full_messages.join('. ')}"
+            end
           end
+          if errors.empty?
+            flash[:notice] = 'Batch update done'
+          else
+            flash[:error] = errors.join(". ")
+          end
+          render nothing: true, status: :no_content
         end
-        if errors.empty?
-          flash[:notice] = 'Batch update done'
-        else
-          flash[:error] = errors.join(". ")
-        end
-        render nothing: true, status: :no_content
       end
     end
 
@@ -54,27 +52,24 @@ module ActiveAdminScopedCollectionActions
           flash[:error] = 'Access denied'
           render nothing: true, status: :no_content and next
         end
-        errors = []
         if block_given?
-          begin
-            instance_eval &block
-          rescue Exception => e
-            errors << e
-          end
+          instance_eval &block
         else
+          errors = []
           scoped_collection_records.find_each do |record|
-            errors << "#{record.attributes[resource_class.primary_key]} | Cant be destroyed}" unless destroy_resource(record)
+            unless destroy_resource(record)
+              errors << "#{record.attributes[resource_class.primary_key]} | Cant be destroyed}"
+            end
           end
+          if errors.empty?
+            flash[:notice] = 'Batch destroy done'
+          else
+            flash[:error] = errors.join(". ")
+          end
+          render nothing: true, status: :no_content
         end
-        if errors.empty?
-          flash[:notice] = 'Batch destroy done'
-        else
-          flash[:error] = errors.join(". ")
-        end
-        render nothing: true, status: :no_content
       end
     end
-
 
 
   end

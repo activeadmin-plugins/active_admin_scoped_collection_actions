@@ -18,5 +18,8 @@ $(document).ready ->
         $('.paginated_collection').find('input.collection_selection:checked').each (i, el) ->
           form_data["collection_selection"].push($(el).val())
 
-        $.post(url, form_data).always () ->
-          window.location.reload()
+        $.post(url, form_data).always (data, textStatus, jqXHR) ->
+          if jqXHR.getResponseHeader('Location')
+            window.location.assign jqXHR.getResponseHeader('Location')
+          else
+            window.location.reload()

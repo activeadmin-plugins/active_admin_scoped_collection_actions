@@ -146,12 +146,18 @@ config.scoped_collection_actions_if = -> { params[:scope] }
 ### Can I use my handler on update/delete action?
 
 You can pass block to default actions update and delete.
+And do custom redirect after it. Use render(location: 'somethin') instead of redirect_to().
+
+This example renders form which allows to change "name" field. And after it do redirect to dashboard page.
 
 ```ruby
-  # Delte absolutely all
-  scoped_collection_action :scoped_collection_destroy do
-    Phone.all.delete_all
-    render nothing: true, status: :no_content
+  scoped_collection_action :scoped_collection_update,
+                           form: -> {
+                             {name: 'text'}
+                           } do
+    scoped_collection_records.update_all(name: params[:changes][:name])
+    flash[:notice] = 'Name successfully changed.'
+    render nothing: true, status: :no_content, location: admin_dashboard_path
   end
 ```
 
@@ -163,7 +169,7 @@ Example:
 
 ```ruby
   scoped_collection_action :erase_date, title: 'Nullify' do
-    batch_action_collection.update_all(manufactured_at: nil)
+    scoped_collection_records.update_all(manufactured_at: nil)
   end
 ```
 
@@ -255,7 +261,7 @@ Example with erasing phone diagonal. In this case you Phone-model has validation
 ```ruby
   scoped_collection_action :change_diagonal, form: { diagonal: 'text' }  do
     errors = []
-    batch_action_collection.find_each do |record|
+    scoped_collection_records.find_each do |record|
       errors << "#{record.errors.full_messages.join('. ')}" unless record.update(diagonal: params[:changes][:diagonal])
     end
     if errors.empty?
