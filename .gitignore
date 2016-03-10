@@ -9,3 +9,4 @@
 /tmp/
 /.idea
 .DS_Store
+/spec/rails

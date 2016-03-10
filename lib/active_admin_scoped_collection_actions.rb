@@ -1,3 +1,4 @@
+require 'activeadmin'
 require 'active_admin_scoped_collection_actions/engine'
 require 'active_admin_scoped_collection_actions/version'
 require 'active_admin_scoped_collection_actions/dsl'
