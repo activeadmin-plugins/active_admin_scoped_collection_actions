@@ -10,7 +10,7 @@ Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (
 
 # Description
 
-This gem give you ability to perform various batch actions on any filtered(or scoped) resource. Action applies to all elements across all pages. It is similar to ActiveAdmin batch action, but affects not only checked records. Usefull if you want to delete or update a lot of records in one click.
+This gem give you ability to perform various batch actions on any filtered(or scoped) resource. Action applies to all records across all pages. It is similar to ActiveAdmin batch action, but affects not only checked records. Usefull if you want to delete or update a lot of records in one click.
 
 # Install
 
@@ -108,7 +108,7 @@ ActiveAdmin.register Phone do
 end
 ```
 
-This simple code will create new button in sidebari "Erase date". After clicking on this button, user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
+This simple code will create new button "Erase date" in sidebar. After clicking this button, user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
 
 
 # Details and Settings
@@ -133,7 +133,7 @@ scoped_collection_action :something_here
 You resource should have some collection actions. If it doesn't have any - sidebar will not appear.
 
 And the last one. By default we dont allow perform actions on all the records. We want protect you from accidental deleting.
-Sidebar with buttons will appear only after you perform filtering or scopes on  resource records
+Sidebar with buttons will appear only after you perform filtering or scopes on resource records.
 
 And lastly you can manage sidebar visibility by resource config:
 
@@ -148,7 +148,7 @@ config.scoped_collection_actions_if = -> { params[:scope] }
 ### Can I use my handler on update/delete action?
 
 You can pass block to default actions update and delete.
-And do custom redirect after it. Use render(location: 'somethin') instead of redirect_to().
+And do custom redirect after it. Use render(location: 'something') instead of redirect_to().
 
 This example renders form which allows to change "name" field. And after it do redirect to dashboard page.
 
@@ -178,7 +178,7 @@ Example:
 
 ### How can I modify modal dialog title?
 
-Similar to button title. User option :confirm
+Similar to button title. Use option :confirm
 
 ```ruby
   scoped_collection_action :scoped_collection_destroy, confirm: 'Delete all phones?'
@@ -200,7 +200,7 @@ Now in HTML page, you have button:
   <button class="my_popup" data="{&quot;auth_token&quot;:&quot;2a+KLu5u9McQENspCiep0DGZI6D09fCVXAN9inrwRG0=&quot;,&quot;batch_action&quot;:&quot;my_pop_action&quot;,&quot;confirm&quot;:&quot;Are you sure?&quot;}">My pop action</button>
 ```
 
-But without handler. Click on the button do nothing.
+But without handler. Clicking on the button does nothing.
 
 You can render form in any way you want.
 It can be some popup(Fancybox, Simplemodal, etc.), or some inline collapsible form.
@@ -252,7 +252,7 @@ Example in JavaScript
 
 We recommend to use Rails Flash messages.
 
-Example with erasing phone diagonal. In this case you Phone-model has validation:
+Example with updating phone diagonal attribute. In this case model Phone has validation:
 
 ```ruby
   class Phone < ActiveRecord::Base
@@ -281,7 +281,7 @@ When you try to update diagonal with "5.6" you will see flash error:
 Diagonal must be an integer.
 ```
 
-But if you use you custom popup, you can show messages with JS.
+But if you use your custom popup, you can show messages with JS.
 
 
 ### Can I perform action only on selected items?
