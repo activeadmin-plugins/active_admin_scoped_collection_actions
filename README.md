@@ -148,7 +148,7 @@ config.scoped_collection_actions_if = -> { params[:scope] }
 ### Can I use my handler on update/delete action?
 
 You can pass block to default actions update and delete.
-And do custom redirect after it. Use render(location: 'somethin') instead of redirect_to().
+And do custom redirect after it. Use render(location: 'something') instead of redirect_to().
 
 This example renders form which allows to change "name" field. And after it do redirect to dashboard page.
 
@@ -252,7 +252,7 @@ Example in JavaScript
 
 We recommend to use Rails Flash messages.
 
-Example with updating phone diagonal attribute. In this case you model Phone has validation:
+Example with updating phone diagonal attribute. In this case model Phone has validation:
 
 ```ruby
   class Phone < ActiveRecord::Base
