@@ -10,7 +10,7 @@ Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (
 
 # Description
 
-This gem give you ability to perform various batch actions on any filtered(or scoped) resource. Action applies to all records across all pages. It is similar to ActiveAdmin batch action, but affects not only checked records. Usefull if you want to delete or update a lot of records in one click.
+This gem give you ability to perform various batch actions on any filtered (or scoped) resource. Action applies to all records across all pages. It is similar to ActiveAdmin batch action, but affects all filtered records. This is usefull if you want to delete or update a lot of records in one click.
 
 # Install
 
@@ -40,9 +40,9 @@ Also include CSS in "app/assets/stylesheets/active_admin.css.scss"
 
 # Usage
 
-Usually you need two standart actions: Delete and Update.
+Usually you need two standard actions: Delete and Update.
 
-For example you have resource Posts. And you want to have delete action. So you one line:
+For example, if you have resource Posts and you want to have a delete action, add:
 
 ```ruby
 scoped_collection_action :scoped_collection_destroy
@@ -62,11 +62,11 @@ ActiveAdmin.register Post do
 end
 ```
 
-Important thing. Visit Posts page with your browser. And you will see no changes. Now  perform any filter with Filters sidebar. Only after that you will see delete button. It will be in sidebar under Filters.
+**Important**: Visit Posts page with your browser and you will see no changes. Now, perform any filter with the Filters sidebar. Only after you filter will you see a delete button. It will be in sidebar under Filters.
 
 ### Update action
 
-Update is second standart action. It is more complex. It has "form" hash wrapped in Proc.
+Update is second standard action and is more complex. It has "form" hash wrapped in Proc:
 
 ```ruby
   scoped_collection_action :scoped_collection_update, form: -> do
@@ -90,9 +90,9 @@ Parameter "form" is a proc object which returns Hash. It defines what fields you
 
 # Custom Actions
 
-Example. We have Phone resource. It has column "manufactured_at". And we need action which will erase this date.
+Example: We have Phone resource and it has column "manufactured_at". We need an action which will erase this date.
 
-In ActiveAdmin resource
+In ActiveAdmin resource:
 
 ```ruby
 ActiveAdmin.register Phone do
@@ -108,7 +108,7 @@ ActiveAdmin.register Phone do
 end
 ```
 
-This simple code will create new button "Erase date" in sidebar. After clicking this button, user will see confirm message "Are you sure?". After confirming all filtered records will be updated.
+This simple code will create a new button "Erase date" in sidebar. After clicking this button, the user will see confirm message "Are you sure?". After confirming, all filtered records will be updated.
 
 
 # Details and Settings
@@ -118,21 +118,22 @@ This simple code will create new button "Erase date" in sidebar. After clicking 
 
 Sidebar visibility by default depends on several things.
 
-First you must set
+First you must set:
 
 ```ruby
 config.batch_actions = true
 ```
 
-Actually inside of this Gem we use "batch_actions". So without them Collection Actions wouldn't work.
+Actually, inside of this Gem we use "batch_actions". So without them Collection Actions wouldn't work.
 
 ```ruby
 scoped_collection_action :something_here
 ```
 
-You resource should have some collection actions. If it doesn't have any - sidebar will not appear.
+You resource should have some collection actions. If it doesn't have any, the sidebar will not appear.
 
-And the last one. By default we dont allow perform actions on all the records. We want protect you from accidental deleting.
+By default we dont allow perform actions on **all** the records. We want protect you from accidental deleting.
+
 Sidebar with buttons will appear only after you perform filtering or scopes on resource records.
 
 And lastly you can manage sidebar visibility by resource config:
@@ -148,9 +149,9 @@ config.scoped_collection_actions_if = -> { params[:scope] }
 ### Can I use my handler on update/delete action?
 
 You can pass block to default actions update and delete.
-And do custom redirect after it. Use render(location: 'something') instead of redirect_to().
+And do custom redirect after it. Use `render` (location: 'something') instead of `redirect_to()`.
 
-This example renders form which allows to change "name" field. And after it do redirect to dashboard page.
+This example renders form which allows to change `name` field. And after it do redirect to dashboard page.
 
 ```ruby
   scoped_collection_action :scoped_collection_update,
@@ -164,9 +165,10 @@ This example renders form which allows to change "name" field. And after it do r
 ```
 
 
-### How can I rename button ?
+### How can I rename button?
 
-Every scoped_collection_action has option :title.
+Every scoped_collection_action has option `:title`.
+
 Example:
 
 ```ruby
@@ -178,7 +180,7 @@ Example:
 
 ### How can I modify modal dialog title?
 
-Similar to button title. Use option :confirm
+Similar to button title. Use option `:confirm`
 
 ```ruby
   scoped_collection_action :scoped_collection_destroy, confirm: 'Delete all phones?'
@@ -187,7 +189,7 @@ Similar to button title. Use option :confirm
 
 ### Can I replace you pop-up form with my own?
 
-Yes. But also you must take care of mandatory parameters passed to server.
+Yes. But also you must take care of mandatory parameters passed to the server.
 
 
 ```ruby
@@ -200,14 +202,13 @@ Now in HTML page, you have button:
   <button class="my_popup" data="{&quot;auth_token&quot;:&quot;2a+KLu5u9McQENspCiep0DGZI6D09fCVXAN9inrwRG0=&quot;,&quot;batch_action&quot;:&quot;my_pop_action&quot;,&quot;confirm&quot;:&quot;Are you sure?&quot;}">My pop action</button>
 ```
 
-But without handler. Clicking on the button does nothing.
+Without handler, clicking on the button does nothing.
 
-You can render form in any way you want.
-It can be some popup(Fancybox, Simplemodal, etc.), or some inline collapsible form.
-It can even be a separate full-page.
+You can render the form in any way you want:
+  - It can be some popup(Fancybox, Simplemodal, etc.), or some inline collapsible form.
+  - It can even be a separate full-page.
 
 One thing is important - how you will send data to server. Generally it should be:
-
 
 POST request
 
@@ -234,7 +235,7 @@ batch_action = "my_pop_action"
 ```authenticity_token``` and ```batch_action``` you can get from data-attribute of the Button.
 
 
-Example in JavaScript
+Example in JavaScript:
 
 ```javascript
   url = window.location.pathname + '/batch_action' + window.location.search
@@ -248,9 +249,9 @@ Example in JavaScript
     window.location.reload()
 ```
 
-### How notify user about success and error operations ?
+### How notify user about success and error operations?
 
-We recommend to use Rails Flash messages.
+We recommend using Rails Flash messages.
 
 Example with updating phone diagonal attribute. In this case model Phone has validation:
 
