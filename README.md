@@ -17,6 +17,9 @@ This gem give you ability to perform various batch actions on any filtered (or s
 Add this line to your application's Gemfile:
 
 ```ruby
+# last version
+gem 'active_admin_scoped_collection_actions'
+# master branch
 gem 'active_admin_scoped_collection_actions', github: 'activeadmin-plugins/active_admin_scoped_collection_actions'
 ```
 
