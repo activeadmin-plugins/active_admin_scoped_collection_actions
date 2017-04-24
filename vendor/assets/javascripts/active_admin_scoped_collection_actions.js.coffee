@@ -2,7 +2,7 @@
 
 $(document).ready ->
 
-  $('.scoped_collection_action_button').click (e) ->
+  $(document).on 'click', '.scoped_collection_action_button', (e) ->
     e.preventDefault()
     fields = JSON.parse( $(this).attr('data') )
 
