@@ -3,9 +3,6 @@ module ActiveAdminScopedCollectionActions
 
     def scoped_collection_action(name, options = {}, &block)
       if name == :scoped_collection_destroy
-        
-      
-
         options[:title] = I18n.t('active_admin_scoped_collection_actions.actions.delete') if options[:title].nil?
         add_scoped_collection_action_default_destroy(options, &block)
       elsif name == :scoped_collection_update
@@ -18,15 +15,14 @@ module ActiveAdminScopedCollectionActions
       config.add_scoped_collection_action(name, options)
     end
 
-
     def add_scoped_collection_action_default_update(options, &block)
       batch_action :scoped_collection_update, if: proc { false } do
         unless authorized?(:batch_edit, resource_class)
           flash[:error] = I18n.t('active_admin_scoped_collection_actions.actions.no_permissions_msg')
-          render nothing: true, status: :no_content and next
+          head :ok and next
         end
         if !params.has_key?(:changes) || params[:changes].empty?
-          render nothing: true, status: :no_content and next
+          head :ok and next
         end
         permitted_changes = params.require(:changes).permit(*(options[:form].call.keys))
         if block_given?
@@ -43,17 +39,16 @@ module ActiveAdminScopedCollectionActions
           else
             flash[:error] = errors.join(". ")
           end
-          render nothing: true, status: :no_content
+          head :ok
         end
       end
     end
-
 
     def add_scoped_collection_action_default_destroy(_, &block)
       batch_action :scoped_collection_destroy, if: proc { false } do |_|
         unless authorized?(:batch_destroy, resource_class)
           flash[:error] = I18n.t('active_admin_scoped_collection_actions.actions.no_permissions_msg')
-          render nothing: true, status: :no_content and next
+          head :ok and next
         end
         if block_given?
           instance_eval &block
@@ -69,11 +64,11 @@ module ActiveAdminScopedCollectionActions
           else
             flash[:error] = errors.join(". ")
           end
-          render nothing: true, status: :no_content
+          head :ok
         end
       end
     end
 
-
   end
 end
+
