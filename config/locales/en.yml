@@ -1,0 +1,11 @@
+en:
+  active_admin_scoped_collection_actions:
+    sidebar_msg: 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
+    confirm_action_message: 'Are you sure?'
+    actions:
+      delete: 'Delete batch'
+      update: 'Update batch'
+    no_permissions_msg: 'Access denied'
+    batch_update_status_msg: 'Batch update done'
+    batch_destroy_status_msg: 'Batch destroy done'
+    fail_on_destroy_msg: 'Cant be destroyed'

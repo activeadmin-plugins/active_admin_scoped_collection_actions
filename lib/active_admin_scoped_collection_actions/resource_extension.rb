@@ -51,7 +51,7 @@ module ActiveAdminScopedCollectionActions
     def scoped_collection_actions_sidebar_section
       ActiveAdmin::SidebarSection.new :collection_actions, only: :index, if: scoped_collection_sidebar_condition do
 
-        div 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
+        div I18n.t('active_admin_scoped_collection_actions.sidebar_msg')
 
         active_admin_config.scoped_collection_actions.each do |key, options={}|
           b_title = options.fetch(:title, ::ActiveSupport::Inflector.humanize(key))
@@ -64,7 +64,7 @@ module ActiveAdminScopedCollectionActions
           if options[:form].present?
             b_data[:inputs] = options[:form].is_a?(Proc) ? options[:form].call : options[:form]
           end
-          b_data[:confirm] = options.fetch(:confirm, 'Are you sure?')
+          b_data[:confirm] = options.fetch(:confirm, I18n.t('active_admin_scoped_collection_actions.confirm_action_message'))
           b_options[:data] = b_data.to_json
           button b_title, b_options
         end

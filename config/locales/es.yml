@@ -1,0 +1,11 @@
+es:
+  active_admin_scoped_collection_actions:
+    sidebar_msg: 'Estas operaciones afectan las filas seleccionadas o en caso que no halla seleccionado ninguna, afectará a todo los registros afectados por los filtros aplicados.'
+    confirm_action_message: '¿Está seguro que quiere realizar esta acción?'
+    actions:
+      delete: 'Batch Borrado'
+      update: 'Batch Actualizado'
+    no_permissions_msg: 'Permiso denegado'
+    batch_update_status_msg: 'Batch actualizado correctamente'
+    batch_destroy_status_msg: 'Batch destruido correctamente'
+    fail_on_destroy_msg: 'No se puede eliminar'
