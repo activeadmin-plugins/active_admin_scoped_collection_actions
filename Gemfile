@@ -4,9 +4,9 @@ source 'https://rubygems.org'
 gemspec
 group :test do
   gem 'sprockets-rails', '2.3.3'
-  gem 'rails', '4.2.0'
+  gem 'rails', '~> 5.1'
   gem 'rspec-rails'
-  gem 'activeadmin', github: 'activeadmin', ref: '64b5295571400c461376cf060dae9522731fe6d9'
+  gem 'activeadmin', '1.0.0'
   gem 'sass-rails'
   gem 'sqlite3'
   gem 'launchy'
