@@ -1,0 +1,12 @@
+sv:
+  active_admin_scoped_collection_actions:
+    sidebar_msg: 'Den här bulkoperationen påverkar markerade poster. Eller om inget är markerat så kommer det påverka alla poster i nuvarande filter och scope.'
+    confirm_action_message: 'Är du säker?'
+    actions:
+      delete: 'Ta bort batch'
+      delete: 'Ta bort batch'
+      update: 'Uppdatera batch'
+    no_permissions_msg: 'Tillträde beviljas ej'
+    batch_update_status_msg: 'Batchuppdatering färdig'
+    batch_destroy_status_msg: 'Batchborttagning färdig'
+    fail_on_destroy_msg: 'Kan inte tas bort'
