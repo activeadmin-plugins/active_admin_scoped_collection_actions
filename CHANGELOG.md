@@ -1,3 +1,8 @@
+## ActiveAdmin Scoped Collection Actions 0.3.4 (August 19, 2017) ##
+
+*   Swedish locale (@buren #27)
+
+
 ## ActiveAdmin Scoped Collection Actions 0.3.3 (July 17, 2017) ##
 
 *   Fixed compatibility with Rails 5.1
