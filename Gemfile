@@ -6,6 +6,7 @@ group :test do
   gem 'sprockets-rails', '2.3.3'
   gem 'rails', '~> 5.1'
   gem 'rspec-rails'
+  gem 'draper'
   gem 'activeadmin', '1.0.0'
   gem 'sass-rails'
   gem 'sqlite3'

@@ -2,6 +2,7 @@ def add_author_resource(options = {}, &block)
 
   ActiveAdmin.register Author do
     config.filters = true
+    decorate_with AuthorDecorator
 
     config.scoped_collection_actions_if = -> { true }
 
