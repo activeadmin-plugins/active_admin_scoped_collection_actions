@@ -1,3 +1,7 @@
+## ActiveAdmin Scoped Collection Actions 0.3.5 (November 22, 2017) ##
+
+*   compatibility with Decorators, fix is intended for old ActiveAdmin (@Zamyatin-AA #30)
+
 ## ActiveAdmin Scoped Collection Actions 0.3.4 (August 19, 2017) ##
 
 *   Swedish locale (@buren #27)
