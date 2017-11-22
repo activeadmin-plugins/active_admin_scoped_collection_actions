@@ -21,6 +21,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 generate :'active_admin:install --skip-users'
 generate :'formtastic:install'
+generate :'decorator Author'
 
 # Install active_admin_date_time_datetimepicker assets
 inject_into_file "app/assets/stylesheets/active_admin.scss",
