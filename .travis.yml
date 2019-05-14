@@ -1,8 +1,22 @@
-script: bundle exec rspec spec
-rvm:
-  - 2.2.7
-  - 2.3.4
+sudo: required
+
+language: ruby
+
+addons:
+  chrome: stable
+
 before_install:
-  - gem install bundler -v '= 1.9.3'
-  - gem update --system
-  - gem --version
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
+
+script: bundle exec rspec spec
+
+env:
+  matrix:
+    - RAILS=4.2.0 AA=1.1.0
+    - RAILS=5.2.0 AA=1.4.0
+    - RAILS=5.2.0 AA=2.0.0
+
+rvm:
+  - 2.4.6
+  - 2.6.3
