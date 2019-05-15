@@ -29,7 +29,7 @@ And then execute:
 $ bundle
 ```
 
-Add the following line at the end of "app/assets/javascript/active_admin.js.coffee":
+Add the following line at the end of "app/assets/javascript/active_admin.js":
 
 ```javascript
 //= require active_admin_scoped_collection_actions

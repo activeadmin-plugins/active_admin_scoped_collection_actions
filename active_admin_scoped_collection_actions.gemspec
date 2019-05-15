@@ -17,6 +17,5 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "coffee-rails"
   spec.add_dependency "activeadmin", ">= 1.1", "< 3.a"
 end
