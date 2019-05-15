@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'activeadmin', "~> #{ENV['AA'] || '1.4.3'}"
-  gem 'rails', "~> #{ENV['RAILS'] || '4.2.11'}"
+  gem 'activeadmin', "~> #{ENV['AA'] || '2.0.0'}"
+  gem 'rails', "~> #{ENV['RAILS'] || '5.2.0'}"
 
   gem 'capybara'
   gem 'chromedriver-helper'
