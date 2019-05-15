@@ -79,14 +79,16 @@ describe 'authors index', type: :feature, js: true do
 
 
   context 'perform Delete-action when cheked only one item' do
-
     let(:delete_author) { Author.first }
 
     before do
-      page.find('#collection_actions_sidebar_section button', text: 'Delete').click
-      page.find("#batch_action_item_#{delete_author.id}").trigger('click')
-      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
-        page.find('button', text: 'OK').click
+      # select one item
+      find("#batch_action_item_#{delete_author.id}", visible: true).click
+      # click "Delete batch"
+      find('#collection_actions_sidebar_section button', text: 'Delete').click
+      # confirm deletion
+      within 'body > .active_admin_dialog_mass_update_by_filter' do
+        find('button', text: 'OK').click
       end
     end
 
@@ -96,7 +98,5 @@ describe 'authors index', type: :feature, js: true do
       expect(Author.take.id).not_to eq(delete_author.id)
       expect(page).to have_css("#batch_action_item_#{Author.take.id}")
     end
-
   end
-
 end
