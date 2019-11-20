@@ -1,5 +1,5 @@
 ActiveAdmin.dialogMassFieldsUpdate = function(message, inputs, callback){
-  let html = `<form id="dialog_confirm" title="${message}"><div stype="padding-right:4px;padding-left:1px;margin-right:2px"><ul>`;
+  let html = `<form id="dialog_confirm" title="${message}"><div style="padding-right:4px;padding-left:1px;margin-right:2px"><ul>`;
   for (let name in inputs) {
     var elem, opts, wrapper;
     let type = inputs[name];
