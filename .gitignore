@@ -11,3 +11,5 @@
 .DS_Store
 /spec/rails
 .versions.conf
+vendor/bundle
+bin
