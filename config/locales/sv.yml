@@ -4,7 +4,6 @@ sv:
     confirm_action_message: 'Är du säker?'
     actions:
       delete: 'Ta bort batch'
-      delete: 'Ta bort batch'
       update: 'Uppdatera batch'
     no_permissions_msg: 'Tillträde beviljas ej'
     batch_update_status_msg: 'Batchuppdatering färdig'
