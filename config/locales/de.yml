@@ -1,0 +1,11 @@
+de:
+  active_admin_scoped_collection_actions:
+    sidebar_msg: 'Diese Aktion betrifft alle ausgewählten Datensätze. Wenn keine ausgewählt sind, betrifft sie alle gefilterten Datensätze.'
+    confirm_action_message: 'Sind Sie sicher?'
+    actions:
+      delete: 'Löschen'
+      update: 'Aktualisieren'
+    no_permissions_msg: 'Zugriff verweigert'
+    batch_update_status_msg: 'Aktualisiert'
+    batch_destroy_status_msg: 'Gelöscht'
+    fail_on_destroy_msg: 'Kann nicht gelöscht werden'
