@@ -4,6 +4,8 @@ Capybara.configure do |config|
   config.match = :prefer_exact
 end
 
+Webdrivers::Chromedriver.update
+
 Capybara.register_driver :selenium_chrome do |app|
   options = Selenium::WebDriver::Chrome::Options.new(
     args: %w[headless disable-gpu no-sandbox]
