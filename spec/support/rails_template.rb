@@ -4,8 +4,24 @@ generate :model, 'author name:string{10}:uniq last_name:string birthday:date'
 generate :model, 'post title:string:uniq body:text author:references'
 
 #Add validation
-inject_into_file "app/models/author.rb", "  validates_presence_of :name\n  validates_uniqueness_of :last_name\n", after: "Base\n"
-inject_into_file "app/models/post.rb", "   validates_presence_of :author\n", after: ":author\n"
+inject_into_file "app/models/author.rb", "  validates_presence_of :name\n  validates_uniqueness_of :last_name\n", after: "ApplicationRecord\n"
+inject_into_file "app/models/post.rb", "  validates_presence_of :author\n", after: ":author\n"
+
+# Add ransackable_attributes
+inject_into_file "app/models/author.rb",
+  "  def self.ransackable_attributes(auth_object = nil)\n" \
+  "    [\"name\", \"last_name\", \"birthday\"]\n" \
+  "  end\n",
+  after: "ApplicationRecord\n"
+
+inject_into_file "app/models/post.rb",
+  "  def self.ransackable_attributes(auth_object = nil)\n" \
+  "    [\"title\", \"body\", \"author_id\"]\n" \
+  "  end\n" \
+  "  def self.ransackable_associations(auth_object = nil)\n" \
+  "    [\"author\"]\n" \
+  "  end\n",
+  after: "ApplicationRecord\n"
 
 # Configure default_url_options in test environment
 inject_into_file "config/environments/test.rb", "  config.action_mailer.default_url_options = { :host => 'example.com' }\n", after: "config.cache_classes = true\n"

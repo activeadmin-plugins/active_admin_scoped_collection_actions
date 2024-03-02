@@ -1,0 +1,44 @@
+name: CI
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+jobs:
+  test:
+    name: Tests with Ruby ${{ matrix.ruby }} Rails ${{ matrix.rails }} Active Admin ${{ matrix.activeadmin }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+          - '3.0.0'
+          - '3.1.0'
+          - '3.2.0'
+          - '3.3.0'
+        rails:
+          - '6.1.0'
+          - '7.0.0'
+          - '7.1.0'
+        activeadmin:
+          - '2.14.0'
+          - '3.0.0'
+          - '3.1.0'
+          - '3.2.0'
+        exclude:
+          - rails: '7.1.0'
+            activeadmin: '2.14.0'
+          - rails: '7.1.0'
+            activeadmin: '3.0.0'
+    env:
+      RAILS: ${{ matrix.rails }}
+      AA: ${{ matrix.activeadmin }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Run tests
+        run: |
+          gem install bundler -v '< 2'
+          bundle install
+          bundle exec rspec spec
