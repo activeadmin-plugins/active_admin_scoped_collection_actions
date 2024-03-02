@@ -1,4 +1,4 @@
-## ActiveAdmin Scoped Collection Actions 1.0.0 (March 02, 2024) ##
+## ActiveAdmin Scoped Collection Actions 1.0.1 (March 02, 2024) ##
 
 *  compatibility with ActiveAdmin 3.x (@oskarpearson #43)
 
