@@ -3,12 +3,15 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-  gem 'rails', "~> #{ENV['RAILS'] || '6.0.0'}"
-  gem 'activeadmin', "~> #{ENV['AA'] || '2.6.0'}"
+  default_rails_version = '7.1.0'
+  default_activeadmin_version = '3.2.0'
 
-  gem 'sprockets-rails', '3.0.4'
+  gem 'rails', "~> #{ENV['RAILS'] || default_rails_version}"
+  gem 'activeadmin', "~> #{ENV['AA'] || default_activeadmin_version}"
+
+  gem 'sprockets-rails'
   gem 'rspec-rails'
-  gem 'coveralls', require: false # Test coverage website. Go to https://coveralls.io
+  gem 'coveralls_reborn', require: false
   gem 'sass-rails'
   gem 'sqlite3', '~> 1.4.0'
   gem 'launchy'
@@ -17,4 +20,5 @@ group :test do
   gem 'webdrivers'
   gem 'byebug'
   gem 'draper'
+  gem 'webrick', require: false
 end
