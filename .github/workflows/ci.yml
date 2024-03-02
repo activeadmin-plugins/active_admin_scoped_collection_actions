@@ -8,11 +8,6 @@ jobs:
   test:
     name: Tests with Ruby ${{ matrix.ruby }} Rails ${{ matrix.rails }} Active Admin ${{ matrix.activeadmin }}
     runs-on: ubuntu-latest
-    services:
-      chrome:
-        image: selenium/standalone-chrome:114.0.5735.133
-        ports:
-          - 4444:4444
     strategy:
       matrix:
         ruby:
