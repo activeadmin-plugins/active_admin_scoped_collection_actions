@@ -1,3 +1,7 @@
+## ActiveAdmin Scoped Collection Actions 1.0.0 (March 02, 2024) ##
+
+*  compatibility with ActiveAdmin 3.x (@oskarpearson #43)
+
 ## ActiveAdmin Scoped Collection Actions 0.3.5 (November 22, 2017) ##
 
 *   compatibility with Decorators, fix is intended for old ActiveAdmin (@Zamyatin-AA #30)
