@@ -41,4 +41,16 @@ describe 'posts index', type: :feature, js: true do
     end
   end
 
+  context 'scoped collection action DELETE' do
+    before do
+      page.find('#collection_actions_sidebar_section button', text: 'Delete').click
+    end
+
+    context 'title' do
+      it 'has predefined confirmation title' do
+        expect(page).to have_css('.active_admin_dialog_mass_update_by_filter', text: 'Custom text for confirm delete all?')
+      end
+    end
+  end
+
 end

@@ -36,6 +36,9 @@ def add_post_resource(options = {}, &block)
                                    author_id: Author.all.map { |author| [author.name, author.id] }
                                }
                              }
+    scoped_collection_action :scoped_collection_destroy,
+                             title: 'Delete',
+                             confirm: -> { 'Custom text for confirm delete all?' }
   end
 
   Rails.application.reload_routes!
