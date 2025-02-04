@@ -14,6 +14,15 @@ def add_author_resource(options = {}, &block)
     scoped_collection_action :scoped_collection_destroy,
                              title: 'Delete',
                              confirm: 'Delete all?'
+    scoped_collection_action :scoped_collection_custom_visible,
+                             if: proc { true },
+                             title: 'Visible Action' do
+                               flash[:notice] = 'Visible action executed'
+                             end
+    scoped_collection_action :scoped_collection_custom_hidden,
+                             if: proc { false },
+                             title: 'Hidden Action'
+                             
   end
 
   Rails.application.reload_routes!

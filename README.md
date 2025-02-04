@@ -149,6 +149,12 @@ config.scoped_collection_actions_if = -> { params[:scope] }
 # etc.
 ```
 
+You can also manage visibility of each action individually:
+
+```ruby
+scoped_collection_action :scoped_collection_destroy, if: proc { can? :destroy, Blog }
+```
+
 ### Can I use my handler on update/delete action?
 
 You can pass block to default actions update and delete.
