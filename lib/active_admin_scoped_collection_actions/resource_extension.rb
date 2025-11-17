@@ -1,5 +1,6 @@
 module ActiveAdminScopedCollectionActions
   module ResourceExtension
+    include MethodOrProcHelper
 
     def initialize(*)
       super
@@ -54,6 +55,8 @@ module ActiveAdminScopedCollectionActions
         div I18n.t('active_admin_scoped_collection_actions.sidebar_msg')
 
         active_admin_config.scoped_collection_actions.each do |key, options={}|
+          next if options.key?(:if) && !call_method_or_exec_proc(options[:if])
+
           b_title = options.fetch(:title, ::ActiveSupport::Inflector.humanize(key))
           b_options = {}
           b_options[:class] = options[:class] if options[:class].present?

@@ -24,6 +24,10 @@ describe 'authors index', type: :feature, js: true do
           .to have_css('button', text: 'Update')
       expect(page.find('#collection_actions_sidebar_section'))
           .to have_css('button', text: 'Delete')
+      expect(page.find('#collection_actions_sidebar_section'))
+          .to have_css('button', text: 'Visible Action')
+      expect(page.find('#collection_actions_sidebar_section'))
+          .not_to have_css('button', text: 'Hidden Action')
     end
 
   end
@@ -76,7 +80,6 @@ describe 'authors index', type: :feature, js: true do
       end
     end
   end
-
 
   context 'perform Delete-action when cheked only one item' do
     let(:delete_author) { Author.first }
