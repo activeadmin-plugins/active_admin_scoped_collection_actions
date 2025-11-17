@@ -68,6 +68,7 @@ module ActiveAdminScopedCollectionActions
             b_data[:inputs] = options[:form].is_a?(Proc) ? options[:form].call : options[:form]
           end
           b_data[:confirm] = options.fetch(:confirm, I18n.t('active_admin_scoped_collection_actions.confirm_action_message'))
+          b_data[:confirm] = b_data[:confirm].call if b_data[:confirm].is_a?(Proc)
           b_options[:data] = b_data.to_json
           button b_title, b_options
         end
