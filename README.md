@@ -1,4 +1,5 @@
-[![Build Status](https://img.shields.io/travis/activeadmin-plugins/active_admin_scoped_collection_actions.svg)](https://travis-ci.org/activeadmin-plugins/active_admin_scoped_collection_actions)
+[![Build Status](https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions/actions/workflows/ci.yml/badge.svg)](https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions/actions/workflows/ci.yml)
+
 
 # ActiveAdmin Scoped Collection Actions
 Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (Filters + Scope) across all pages.
