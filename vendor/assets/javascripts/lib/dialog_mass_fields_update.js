@@ -1,4 +1,5 @@
 ActiveAdmin.dialogMassFieldsUpdate = function(message, inputs, callback){
+  const dialogClasses = 'active_admin_dialog active_admin_dialog_mass_update_by_filter';
   let html = `<form id="dialog_confirm" title="${message}"><div style="padding-right:4px;padding-left:1px;margin-right:2px"><ul>`;
   for (let name in inputs) {
     var elem, opts, wrapper;
@@ -47,7 +48,8 @@ ActiveAdmin.dialogMassFieldsUpdate = function(message, inputs, callback){
 
   return form.dialog({
     modal: true,
-    dialogClass: 'active_admin_dialog active_admin_dialog_mass_update_by_filter',
+    classes: { 'ui-dialog': `ui-corner-all ${dialogClasses}` },
+    dialogClass: dialogClasses,
     maxHeight: window.innerHeight - (window.innerHeight * 0.1),
     open() {
       $('body').trigger('mass_update_modal_dialog:after_open', [form]);
