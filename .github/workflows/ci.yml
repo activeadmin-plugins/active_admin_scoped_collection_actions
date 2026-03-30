@@ -2,22 +2,17 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - master
+    branches: [master]
 jobs:
   test:
-    name: Tests with Ruby ${{ matrix.ruby }} Rails ${{ matrix.rails }} Active Admin ${{ matrix.activeadmin }}
+    name: Ruby ${{ matrix.ruby }} / Rails ${{ matrix.rails }} / AA ${{ matrix.activeadmin }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        ruby:
-          - '3.2.0'
-          - '3.3.0'
-        rails:
-          - '7.1.0'
-          - '7.2.0'
-        activeadmin:
-          - '3.3.0'
+        ruby: ['3.2.0', '3.3.0', '3.4.0']
+        rails: ['7.1.0', '7.2.0']
+        activeadmin: ['3.2.0', '3.3.0']
     env:
       RAILS: ${{ matrix.rails }}
       AA: ${{ matrix.activeadmin }}
@@ -26,8 +21,6 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
       - name: Run tests
-        run: |
-          gem install bundler -v '< 2'
-          bundle install
-          bundle exec rspec spec
+        run: bundle exec rspec spec
