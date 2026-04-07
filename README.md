@@ -1,4 +1,5 @@
 [![Build Status](https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions/actions/workflows/ci.yml/badge.svg)](https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions/actions/workflows/ci.yml)
+![Coverage](https://img.shields.io/endpoint?url=https://activeadmin-plugins.github.io/active_admin_scoped_collection_actions/badge.json)
 
 
 # ActiveAdmin Scoped Collection Actions

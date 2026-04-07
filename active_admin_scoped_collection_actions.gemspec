@@ -12,10 +12,12 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions"
   spec.license       = "MIT"
 
+  spec.required_ruby_version = '>= 3.1.0'
+
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activeadmin", ">= 1.1", "< 4.0"
+  spec.add_dependency "activeadmin", ">= 3.0", "< 4.0"
 end

@@ -1,3 +1,8 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter '/spec/'
+end
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH << File.expand_path('../support', __FILE__)
 
@@ -29,8 +34,6 @@ ActiveAdmin.application.current_user_method = false
 require 'rspec/rails'
 require 'capybara/rails'
 require 'capybara/rspec'
-require 'selenium-webdriver'
-
 require 'support/admin'
 require 'support/capybara'
 
@@ -38,6 +41,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before(:suite) do
+    ActiveRecord::Migration.maintain_test_schema!
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
   end
