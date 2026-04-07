@@ -47,6 +47,7 @@ ActiveAdmin.dialogMassFieldsUpdate = function(message, inputs, callback){
 
   return form.dialog({
     modal: true,
+    classes: { 'ui-dialog': 'ui-corner-all active_admin_dialog active_admin_dialog_mass_update_by_filter' },
     dialogClass: 'active_admin_dialog active_admin_dialog_mass_update_by_filter',
     maxHeight: window.innerHeight - (window.innerHeight * 0.1),
     open() {
