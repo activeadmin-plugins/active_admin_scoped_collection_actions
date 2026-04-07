@@ -1,5 +1,9 @@
 # Rails template to build the sample app for specs
 
+# Ensure Sprockets manifest exists (Rails 8.0+ no longer generates it)
+FileUtils.mkdir_p("app/assets/config")
+File.write("app/assets/config/manifest.js", "//= link_tree ../images\n")
+
 generate :model, 'author name:string{10}:uniq last_name:string birthday:date --force'
 generate :model, 'post title:string:uniq body:text author:references --force'
 
