@@ -2,6 +2,9 @@ de:
   active_admin_scoped_collection_actions:
     sidebar_msg: 'Diese Aktion betrifft alle ausgewählten Datensätze. Wenn keine ausgewählt sind, betrifft sie alle gefilterten Datensätze.'
     confirm_action_message: 'Sind Sie sicher?'
+    confirm_submit_summary: 'Sie werden {count} Datensätze aktualisieren mit:'
+    confirm_destroy_summary: 'Sie werden {count} Datensätze löschen.'
+    confirm_action_summary: 'Sie werden diese Aktion für {count} Datensätze ausführen.'
     actions:
       delete: 'Löschen'
       update: 'Aktualisieren'

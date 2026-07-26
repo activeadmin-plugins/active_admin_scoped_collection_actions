@@ -9,11 +9,13 @@ def add_author_resource(options = {}, &block)
     scoped_collection_action :scoped_collection_update,
                              title: 'Update',
                              form: -> {
-                               {birthday: 'datepicker'}
+                               {birthday: 'datepicker',
+                                last_name: {type: 'text', class: 'my-widget'}}
                              }
     scoped_collection_action :scoped_collection_destroy,
                              title: 'Delete',
-                             confirm: 'Delete all?'
+                             confirm: 'Delete all?',
+                             confirm_summary: true
     scoped_collection_action :scoped_collection_custom_visible,
                              if: proc { true },
                              title: 'Visible Action' do
@@ -39,6 +41,7 @@ def add_post_resource(options = {}, &block)
 
     scoped_collection_action :scoped_collection_update,
                              title: 'Update',
+                             confirm_submit: 'Apply changes to all posts?',
                              form: -> {
                                {
                                    body: 'text',

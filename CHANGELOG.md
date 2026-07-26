@@ -1,3 +1,10 @@
+## Unreleased ##
+
+*   New action option `:confirm_submit` - turns the fields dialog into two steps, the second one replaces the
+    fields with amount of affected records and the changes to be applied
+*   New action option `:confirm_summary` - tells the user how many records the action affects
+*   Form field can be defined as `{type: 'text', class: 'my-widget'}` to render input with own class
+
 ## ActiveAdmin Scoped Collection Actions 1.0.1 (March 02, 2024) ##
 
 *  compatibility with ActiveAdmin 3.x (@oskarpearson #43)

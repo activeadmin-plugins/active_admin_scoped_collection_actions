@@ -2,6 +2,10 @@ en:
   active_admin_scoped_collection_actions:
     sidebar_msg: 'This batch operations affect selected records. Or if none is selected, it will involve all records by current filters and scopes.'
     confirm_action_message: 'Are you sure?'
+    # {count} is replaced with amount of affected records
+    confirm_submit_summary: 'You are going to update {count} record(s) with:'
+    confirm_destroy_summary: 'You are going to delete {count} record(s).'
+    confirm_action_summary: 'You are going to perform this action on {count} record(s).'
     actions:
       delete: 'Delete batch'
       update: 'Update batch'

@@ -23,6 +23,45 @@
   }
 }
 
+.active_admin_dialog_mass_update_by_filter, .active_admin_dialog_confirm_submit {
+  .dialog_records_summary {
+    margin: 0 0 5px 0;
+  }
+  .dialog_spinner {
+    display: block;
+    box-sizing: border-box;
+    width: 24px;
+    height: 24px;
+    margin: 15px auto;
+    border: 3px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: dialog_spinner_rotate 0.8s linear infinite;
+  }
+  button:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
+
+@keyframes dialog_spinner_rotate {
+  to { transform: rotate(360deg); }
+}
+
+.active_admin_dialog_confirm_submit {
+  .dialog_confirm_submit_changes {
+    margin: 5px 0 0 0;
+
+    li {
+      display: block;
+      margin: 3px 0 0 0;
+    }
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
 .sidebar_section.panel {
   .scoped_collection_action_button {
     cursor: pointer;
