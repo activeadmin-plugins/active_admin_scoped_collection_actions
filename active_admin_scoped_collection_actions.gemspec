@@ -14,11 +14,13 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 3.1.0'
 
-  # `screenshots/` is two README images — 284 KB, 99% of the published
-  # gem, for pictures that render from GitHub and are never read from
-  # the package. `.github/` is CI config. `vendor/` stays: that is the
-  # shipped JS.
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|screenshots|\.github)/}) }
+  # Whitelist, not a reject list: a new directory in the repo does not
+  # reach consumers until it is named here. The reject form needs a new
+  # pattern every time the repo grows one, and that is how 284 KB of README images under screenshots/
+  # ended up published in the first place.
+  # `vendor/` is the shipped JS; `exe/` matches the bindir below.
+  spec.files         = Dir["lib/**/*", "vendor/**/*", "config/**/*", "exe/**/*",
+                           "README.md", "LICENSE.txt", "CHANGELOG.md"]
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
