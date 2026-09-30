@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   # pattern every time the repo grows one, and that is how 284 KB of README images under screenshots/
   # ended up published in the first place.
   # `vendor/` is the shipped JS; `exe/` matches the bindir below.
-  spec.files         = `git ls-files -z -- lib vendor config exe README.md LICENSE.txt CHANGELOG.md`.split("\x0")
+  spec.files         = `git ls-files -z -- lib app vendor config exe bin README.md LICENSE.txt CHANGELOG.md`.split("\x0")
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
