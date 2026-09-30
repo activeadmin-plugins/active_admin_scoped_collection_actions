@@ -14,7 +14,11 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '>= 3.1.0'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  # `screenshots/` is two README images — 284 KB, 99% of the published
+  # gem, for pictures that render from GitHub and are never read from
+  # the package. `.github/` is CI config. `vendor/` stays: that is the
+  # shipped JS.
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|screenshots|\.github)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
