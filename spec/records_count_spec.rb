@@ -58,19 +58,45 @@ describe 'affected records count', type: :feature, js: true do
     end
   end
 
-  # .except(:eager_load, :select, :order, :limit, :offset) in the count action.
-  # Without it ActiveRecord counts through a subquery that keeps the limit and
-  # answers 1 for a collection the action goes on to touch in full.
+  # The action walks the relation with find_each, which honours limit and
+  # offset, so the dialog has to answer with the same number. Measured on
+  # ActiveRecord 8.0: find_each over a .limit(1) scope yields exactly one
+  # record, so promising three would be promising records it never touches.
   context 'when the scope carries order and limit' do
     before do
       add_ordered_author_resource
       visit '/admin/ordered_authors'
     end
 
-    it 'counts the unlimited total' do
+    it 'counts only what the limit lets the action reach' do
       page.find('#collection_actions_sidebar_section button', text: 'Delete').click
       expect(page).to have_css('.dialog_records_summary',
-                               text: 'You are going to delete 3 record(s).')
+                               text: 'You are going to delete 1 record(s).')
+    end
+  end
+
+  # A grouped relation answers .count with a Hash of per-group tallies, which
+  # reaches the dialog as a JSON object and renders as [object Object].
+  # Counting through a subquery collapses it to the number of rows the
+  # relation yields, which is what find_each then walks.
+  context 'when the scope is grouped' do
+    before do
+      # Two of the three authors share a birthday, so the grouped relation
+      # yields two rows for three records -- and the count has to follow the
+      # rows, because that is what find_each walks.
+      Author.find_by(name: 'John').update!(birthday: '1980-01-01')
+      Author.find_by(name: 'Jane').update!(birthday: '1980-01-01')
+      Author.find_by(name: 'Jack').update!(birthday: '1990-02-02')
+      add_grouped_author_resource
+      visit '/admin/grouped_authors'
+    end
+
+    it 'counts the grouped rows as one number' do
+      expect(Author.count).to eq(3)
+
+      page.find('#collection_actions_sidebar_section button', text: 'Delete').click
+      expect(page).to have_css('.dialog_records_summary',
+                               text: 'You are going to delete 2 record(s).')
     end
   end
 end

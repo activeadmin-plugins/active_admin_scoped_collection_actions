@@ -21,7 +21,15 @@ module ActiveAdminScopedCollectionActions
     # authorization scope, so it exposes nothing the user can not see on the index page.
     def add_scoped_collection_records_count_action
       batch_action :scoped_collection_records_count, if: proc { false } do
-        count = scoped_collection_records.except(:eager_load, :select, :order, :limit, :offset).count
+        # Count the rows this relation yields, not the rows its WHERE matches.
+        # The action walks the same relation with find_each, which honours
+        # limit and offset, so stripping them here would promise more records
+        # than it goes on to touch. Counting through a subquery keeps every
+        # clause and collapses a grouped scope -- whose bare .count answers
+        # with a Hash the dialog would render as [object Object] -- into the
+        # single number the dialog needs.
+        scope = scoped_collection_records.except(:eager_load, :select, :order)
+        count = scope.model.unscoped.from(scope.select('1'), :subquery_for_count).count
         render json: { count: count }
       end
     end

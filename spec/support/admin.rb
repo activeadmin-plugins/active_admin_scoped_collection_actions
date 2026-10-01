@@ -67,6 +67,28 @@ end
 # Author whose scoped_collection already carries order and limit, which the
 # count action has to strip off before counting.
 # Routed as /admin/ordered_authors.
+def add_grouped_author_resource
+
+  ActiveAdmin.register Author, as: 'GroupedAuthor' do
+    config.filters = true
+
+    config.scoped_collection_actions_if = -> { true }
+
+    controller do
+      def scoped_collection
+        end_of_association_chain.group(:birthday)
+      end
+    end
+
+    scoped_collection_action :scoped_collection_destroy,
+                             title: 'Delete',
+                             confirm: 'Delete all?',
+                             confirm_summary: true
+  end
+
+  Rails.application.reload_routes!
+end
+
 def add_ordered_author_resource
 
   ActiveAdmin.register Author, as: 'OrderedAuthor' do
