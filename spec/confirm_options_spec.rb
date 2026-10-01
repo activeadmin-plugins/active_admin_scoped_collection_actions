@@ -48,6 +48,27 @@ describe 'confirmation dialog options', type: :feature, js: true do
       end
     end
 
+    # The default translation key branches on the action name:
+    # :scoped_collection_destroy gets confirm_destroy_summary, everything else
+    # confirm_action_summary.
+    context 'given true' do
+      before do
+        add_option_author_resource(custom: {confirm_summary: true})
+        visit '/admin/option_authors'
+      end
+
+      it 'words a custom action differently from the destroy action' do
+        page.find('#collection_actions_sidebar_section button', text: 'Act').click
+        expect(page).to have_css('.dialog_records_summary',
+                                 text: 'You are going to perform this action on 2 record(s).')
+
+        page.find('button', text: 'Cancel').click
+        page.find('#collection_actions_sidebar_section button', text: 'Delete').click
+        expect(page).to have_css('.dialog_records_summary',
+                                 text: 'You are going to delete 2 record(s).')
+      end
+    end
+
     context 'given a Proc returning false' do
       before do
         add_option_author_resource(custom: {confirm_summary: -> { false }})
