@@ -32,6 +32,32 @@ describe 'affected records count', type: :feature, js: true do
     end
   end
 
+  # add_scoped_collection_records_count_action is called by every
+  # scoped_collection_action, so the authors resource registers it four times.
+  context 'registered by four scoped collection actions' do
+    let(:resource) { ActiveAdmin.application.namespaces[:admin].resources['Author'] }
+
+    before do
+      add_author_resource
+      visit '/admin/authors'
+    end
+
+    it 'leaves one batch action per declared action plus one count action' do
+      expect(resource.scoped_collection_actions.keys).to match_array(
+        [:scoped_collection_update, :scoped_collection_destroy,
+         :scoped_collection_custom_visible, :scoped_collection_custom_hidden])
+      expect(resource.batch_actions.map(&:sym)).to match_array(
+        resource.scoped_collection_actions.keys + [:scoped_collection_records_count, :destroy])
+    end
+
+    it 'keeps the count action out of the batch actions dropdown' do
+      expect(page).to have_css('.batch_actions_selector')
+      offered = page.all('.batch_actions_selector a.batch_action', visible: :all)
+                    .map { |link| link['data-action'] }
+      expect(offered).to eq(['destroy'])
+    end
+  end
+
   # .except(:eager_load, :select, :order, :limit, :offset) in the count action.
   # Without it ActiveRecord counts through a subquery that keeps the limit and
   # answers 1 for a collection the action goes on to touch in full.
