@@ -234,6 +234,11 @@ itself will use, so it costs one extra COUNT query per opened dialog. Until it a
 displayed at all - there is a spinner in its place and OK is disabled, so nothing can be confirmed before the
 user sees what they confirm. Without `:confirm_summary` nothing is counted and nothing is requested.
 
+Both options in one flow - an update action with `confirm_submit:` and the summary it shows, from the sidebar
+button to the result:
+
+![confirm_summary and confirm_submit](/screen/example_confirm_summary.png)
+
 ### How can I ask an extra confirmation before the form is submitted?
 
 An action without a form is confirmed by the modal dialog itself - it has no fields and the user just presses OK.
