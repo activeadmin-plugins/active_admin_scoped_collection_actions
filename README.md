@@ -114,8 +114,9 @@ In this example the Phone model has fields:
 - `has_3g` — boolean
 
 The `form` parameter is a Proc which returns a Hash. It defines which fields you want to be able to update. Hash
-keys are column names in the database, hash values are types of HTML inputs. Only `text`, `datepicker` and
-selectbox are supported. If you want something more complex, you can build your own forms.
+keys are column names in the database, hash values are types of HTML inputs. Supported values are `text`,
+`checkbox`, `datepicker`, and an Array of options for a selectbox. If you want something more complex, you can
+build your own forms.
 
 A field value can also be a Hash, `{type: 'text', class: 'my-widget'}`. Such a field is rendered as a plain input
 with your own class on it, so you can turn it into any widget (datetime picker, autocomplete, etc.) with your own
@@ -252,7 +253,8 @@ text is replaced with the number.
 The amount is requested when the dialog is opened, with the same filters, scope and checked records the action
 itself will use, so it costs one extra COUNT query per opened dialog. Until it arrives the message is not
 displayed at all — there is a spinner in its place and OK is disabled, so nothing can be confirmed before the
-user sees what they confirm. Without `:confirm_summary` nothing is counted and nothing is requested.
+user sees what they confirm. An action that sets neither `:confirm_summary` nor `:confirm_submit` counts nothing
+and requests nothing — `:confirm_submit` shows the same sentence on its second step, so it counts too.
 
 Both options in one flow — an update action with `confirm_submit:` and the summary it shows, from the sidebar
 button to the result:
