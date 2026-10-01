@@ -237,7 +237,7 @@ user sees what they confirm. Without `:confirm_summary` nothing is counted and n
 Both options in one flow - an update action with `confirm_submit:` and the summary it shows, from the sidebar
 button to the result:
 
-![confirm_summary and confirm_submit](/screen/example_confirm_summary.png)
+![confirm_summary and confirm_submit](/screenshots/example_confirm_summary.png)
 
 ### How can I ask an extra confirmation before the form is submitted?
 
