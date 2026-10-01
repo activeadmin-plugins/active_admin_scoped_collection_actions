@@ -64,9 +64,10 @@ def add_option_author_resource(update: {}, destroy: {}, custom: {})
 end
 
 
-# Author whose scoped_collection already carries order and limit, which the
-# count action has to strip off before counting.
-# Routed as /admin/ordered_authors.
+# Author whose scoped_collection is grouped, so the relation yields one row per
+# group rather than one per record. A bare .count on it answers with a Hash of
+# per-group tallies, which is why the count action goes through a subquery.
+# Routed as /admin/grouped_authors.
 def add_grouped_author_resource
 
   ActiveAdmin.register Author, as: 'GroupedAuthor' do
@@ -89,6 +90,10 @@ def add_grouped_author_resource
   Rails.application.reload_routes!
 end
 
+# Author whose scoped_collection already carries order and limit. The count
+# action drops the order, which cannot change how many rows there are, and
+# keeps the limit, which can -- find_each honours it.
+# Routed as /admin/ordered_authors.
 def add_ordered_author_resource
 
   ActiveAdmin.register Author, as: 'OrderedAuthor' do
