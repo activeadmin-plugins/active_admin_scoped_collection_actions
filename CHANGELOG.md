@@ -1,3 +1,7 @@
+## Unreleased ##
+
+*   Tested against Ruby 3.3, 3.4 and 4.0 with Rails 8.0 and 8.1; dropped EOL Ruby 3.2 and Rails 7.1/7.2 and raised the required Ruby version to 3.3
+
 ## ActiveAdmin Scoped Collection Actions 1.0.1 (March 02, 2024) ##
 
 *  compatibility with ActiveAdmin 3.x (@oskarpearson #43)
