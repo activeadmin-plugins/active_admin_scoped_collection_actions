@@ -4,6 +4,7 @@
     fields with amount of affected records and the changes to be applied
 *   New action option `:confirm_summary` - tells the user how many records the action affects
 *   Form field can be defined as `{type: 'text', class: 'my-widget'}` to render input with own class
+*   Tested against Ruby 3.3, 3.4 and 4.0 with Rails 8.0 and 8.1; dropped EOL Ruby 3.2 and Rails 7.1/7.2 and raised the required Ruby version to 3.3
 
 ## ActiveAdmin Scoped Collection Actions 1.0.1 (March 02, 2024) ##
 
@@ -17,11 +18,9 @@
 
 *   Swedish locale (@buren #27)
 
-
 ## ActiveAdmin Scoped Collection Actions 0.3.3 (July 17, 2017) ##
 
 *   Fixed compatibility with Rails 5.1
-
 
 ## ActiveAdmin Scoped Collection Actions 0.3.2 (July 17, 2017) ##
 

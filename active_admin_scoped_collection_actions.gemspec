@@ -12,9 +12,14 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/activeadmin-plugins/active_admin_scoped_collection_actions"
   spec.license       = "MIT"
 
-  spec.required_ruby_version = '>= 3.1.0'
+  spec.required_ruby_version = '>= 3.3'
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  # Whitelist, not a reject list: a new directory in the repo does not
+  # reach consumers until it is named here. The reject form needs a new
+  # pattern every time the repo grows one, and that is how 284 KB of README images under screenshots/
+  # ended up published in the first place.
+  # `vendor/` is the shipped JS; `exe/` matches the bindir below.
+  spec.files         = `git ls-files -z -- lib app vendor config exe bin README.md LICENSE.txt CHANGELOG.md`.split("\x0")
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
