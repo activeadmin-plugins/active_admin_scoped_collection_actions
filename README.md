@@ -250,11 +250,19 @@ You are going to delete 100500 record(s).
 `confirm_action_summary` for any other action. Pass a String or a Proc to use your own text. `{count}` in the
 text is replaced with the number.
 
-The amount is requested when the dialog is opened, with the same filters, scope and checked records the action
-itself will use, so it costs one extra COUNT query per opened dialog. Until it arrives the message is not
-displayed at all — there is a spinner in its place and OK is disabled, so nothing can be confirmed before the
-user sees what they confirm. An action that sets neither `:confirm_summary` nor `:confirm_submit` counts nothing
-and requests nothing — `:confirm_submit` shows the same sentence on its second step, so it counts too.
+The amount is requested from the server with the same filters, scope and checked records the action itself will
+use, so it costs one extra COUNT query. Until the answer arrives the message is not displayed at all — there is
+a spinner in its place and OK is disabled, so nothing can be confirmed before the user sees what they confirm.
+
+When that request happens depends on which option is set:
+
+- neither `:confirm_summary` nor `:confirm_submit` — nothing is counted and no request is made;
+- `:confirm_summary` — once, when the dialog is opened;
+- `:confirm_submit` — once, when OK is pressed and the second step appears, and not at all when the user checked
+  no fields, because then there is nothing to confirm and the action runs straight away.
+
+Setting both does **not** make two requests. `:confirm_submit` takes over, and `:confirm_summary` only supplies
+the wording for the sentence on its second step.
 
 Both options in one flow — an update action with `confirm_submit:` and the summary it shows, from the sidebar
 button to the result:
