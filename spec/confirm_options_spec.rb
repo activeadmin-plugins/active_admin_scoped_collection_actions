@@ -89,6 +89,40 @@ describe 'confirmation dialog options', type: :feature, js: true do
     end
   end
 
+  # The placeholder is {count} and not Ruby's %{count}, because it is
+  # substituted in JavaScript when the count request comes back, not by I18n.
+  describe 'the {count} placeholder' do
+
+    context 'when the summary has one' do
+      before do
+        add_option_author_resource(custom: {confirm_summary: 'Affecting {count} of them.'})
+        visit '/admin/option_authors'
+        page.find('#collection_actions_sidebar_section button', text: 'Act').click
+      end
+
+      it 'substitutes the number and leaves no placeholder behind' do
+        expect(page).to have_css('.dialog_records_summary', text: 'Affecting 2 of them.')
+        expect(page.find('.dialog_records_summary').text).to_not include('{count}')
+      end
+    end
+
+    context 'when the summary has none' do
+      before do
+        add_option_author_resource(custom: {confirm_summary: 'This action needs no numbers.'})
+        visit '/admin/option_authors'
+        page.find('#collection_actions_sidebar_section button', text: 'Act').click
+      end
+
+      it 'renders unchanged and still lets the action be confirmed' do
+        page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+          expect(page).to have_css('.dialog_records_summary', text: 'This action needs no numbers.')
+          expect(page).to_not have_css('.dialog_spinner')
+          expect(page).to have_button('OK', disabled: false)
+        end
+      end
+    end
+  end
+
   describe ':confirm_submit' do
 
     context 'given true' do
