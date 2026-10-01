@@ -93,6 +93,17 @@ In this example Phone model has fields:
 
 Parameter "form" is a proc object which returns Hash. It defines what fields you want to be able to update. Hash keys are  column names in database. Hash values are a types of HTML inputs. We support only "text", "datepicker" and "selectbox". If you want something more complex - you can build your own forms.
 
+A field value can also be a Hash `{type: 'text', class: 'my-widget'}`. Such field is rendered as a plain input with your own
+class on it, so you can turn it into any widget(datetime picker, autocomplete, etc.) with your own JavaScript. The dialog
+triggers `mass_update_modal_dialog:after_open` event on `body` with the form as an argument, this is the place to initialize
+your widgets:
+
+```javascript
+  $(document).on('mass_update_modal_dialog:after_open', function (event, form) {
+    $(form).find('input.my-widget').myWidget();
+  });
+```
+
 # Custom Actions
 
 Example: We have Phone resource and it has column "manufactured_at". We need an action which will erase this date.
@@ -195,6 +206,77 @@ Similar to button title. Use option `:confirm`
 
 ```ruby
   scoped_collection_action :scoped_collection_destroy, confirm: 'Delete all phones?'
+```
+
+
+### How can I tell the user how many records are affected?
+
+Option `:confirm_summary` adds a sentence with the amount of affected records to the dialog:
+
+```ruby
+  scoped_collection_action :scoped_collection_destroy, confirm_summary: true
+```
+
+```
+Delete all?
+
+You are going to delete 100500 record(s).
+
+                                   [ OK ] [ Cancel ]
+```
+
+`true` uses the default text - `confirm_destroy_summary` locale key for `:scoped_collection_destroy` and
+`confirm_action_summary` for any other action. Pass a String or a Proc to use your own text. `{count}` in the
+text is replaced with the number.
+
+The amount is requested when the dialog is opened, with the same filters, scope and checked records the action
+itself will use, so it costs one extra COUNT query per opened dialog. Until it arrives the message is not
+displayed at all - there is a spinner in its place and OK is disabled, so nothing can be confirmed before the
+user sees what they confirm. Without `:confirm_summary` nothing is counted and nothing is requested.
+
+Both options in one flow - an update action with `confirm_submit:` and the summary it shows, from the sidebar
+button to the result:
+
+![confirm_summary and confirm_submit](/screenshots/example_confirm_summary.png)
+
+### How can I ask an extra confirmation before the form is submitted?
+
+An action without a form is confirmed by the modal dialog itself - it has no fields and the user just presses OK.
+An action with a form applies changes immediately after OK is pressed. Use option `:confirm_submit` to turn such
+action into two steps - the second one replaces the fields with a summary of what is going to happen:
+
+```ruby
+  scoped_collection_action :scoped_collection_update,
+                           confirm_submit: true,
+                           form: -> { { body: 'text' } }
+```
+
+```
+Are you sure?
+
+You are going to update 100500 record(s) with:
+  Body: Text here...
+  Author_id: Jane
+
+                                     [ OK ] [ Back ]
+```
+
+"Back" returns to the form with everything the user filled in still there. Only the fields the user checked are
+listed, and when nothing is checked there is nothing to confirm - the action is performed right away. Text of
+the sentence is `confirm_submit_summary` locale key, or `:confirm_summary` option when you set it.
+
+```ruby
+  scoped_collection_action :scoped_collection_update,
+                           confirm_submit: true,
+                           form: -> { { name: 'text' } }
+```
+
+`true` shows the default message ("Are you sure?"). Pass a String or a Proc to use your own:
+
+```ruby
+  scoped_collection_action :scoped_collection_update,
+                           confirm_submit: 'Update all filtered phones?',
+                           form: -> { { name: 'text' } }
 ```
 
 

@@ -2,6 +2,7 @@ module ActiveAdminScopedCollectionActions
   module DSL
 
     def scoped_collection_action(name, options = {}, &block)
+      add_scoped_collection_records_count_action
       if name == :scoped_collection_destroy
         options[:title] = I18n.t('active_admin_scoped_collection_actions.actions.delete') if options[:title].nil?
         add_scoped_collection_action_default_destroy(options, &block)
@@ -13,6 +14,24 @@ module ActiveAdminScopedCollectionActions
       end
       # sidebar button
       config.add_scoped_collection_action(name, options)
+    end
+
+    # Amount of records affected by a scoped collection action. Used by the confirmation
+    # dialog of an action with :confirm_submit option. Collection is already limited by
+    # authorization scope, so it exposes nothing the user can not see on the index page.
+    def add_scoped_collection_records_count_action
+      batch_action :scoped_collection_records_count, if: proc { false } do
+        # Count the rows this relation yields, not the rows its WHERE matches.
+        # The action walks the same relation with find_each, which honours
+        # limit and offset, so stripping them here would promise more records
+        # than it goes on to touch. Counting through a subquery keeps every
+        # clause and collapses a grouped scope -- whose bare .count answers
+        # with a Hash the dialog would render as [object Object] -- into the
+        # single number the dialog needs.
+        scope = scoped_collection_records.except(:eager_load, :select, :order)
+        count = scope.model.unscoped.from(scope.select('1'), :subquery_for_count).count
+        render json: { count: count }
+      end
     end
 
     def add_scoped_collection_action_default_update(options, &block)

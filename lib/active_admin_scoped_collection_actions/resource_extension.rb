@@ -69,6 +69,18 @@ module ActiveAdminScopedCollectionActions
           end
           b_data[:confirm] = options.fetch(:confirm, I18n.t('active_admin_scoped_collection_actions.confirm_action_message'))
           b_data[:confirm] = b_data[:confirm].call if b_data[:confirm].is_a?(Proc)
+          confirm_submit = options.fetch(:confirm_submit, false)
+          confirm_submit = confirm_submit.call if confirm_submit.is_a?(Proc)
+          if confirm_submit
+            b_data[:confirm_submit] = confirm_submit.is_a?(String) ? confirm_submit : I18n.t('active_admin_scoped_collection_actions.confirm_action_message')
+            b_data[:confirm_submit_summary] = I18n.t('active_admin_scoped_collection_actions.confirm_submit_summary')
+          end
+          confirm_summary = options.fetch(:confirm_summary, false)
+          confirm_summary = confirm_summary.call if confirm_summary.is_a?(Proc)
+          if confirm_summary
+            default_key = key.to_sym == :scoped_collection_destroy ? 'confirm_destroy_summary' : 'confirm_action_summary'
+            b_data[:confirm_summary] = confirm_summary.is_a?(String) ? confirm_summary : I18n.t("active_admin_scoped_collection_actions.#{default_key}")
+          end
           b_options[:data] = b_data.to_json
           button b_title, b_options
         end

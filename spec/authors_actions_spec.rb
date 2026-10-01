@@ -56,6 +56,27 @@ describe 'authors index', type: :feature, js: true do
   end
 
 
+  context 'scoped collection action UPDATE with custom input class' do
+    # last_name is unique, so only one author is updated
+    let(:author) { Author.first }
+    let(:new_last_name) { 'Smith' }
+
+    before do
+      find("#batch_action_item_#{author.id}", visible: true).click
+      page.find('#collection_actions_sidebar_section button', text: 'Update').click
+      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+        page.find('input#mass_update_dialog_last_name').click
+        page.find('input[name="last_name"].my-widget').set(new_last_name)
+        page.find('button', text: 'OK').click
+      end
+    end
+
+    it 'new last name was set for checked author' do
+      expect(page).to have_css('.flashes .flash.flash_notice')
+      expect(author.reload.last_name).to eq(new_last_name)
+    end
+  end
+
   context 'scoped collection action DELETE' do
     before do
       page.find('#collection_actions_sidebar_section button', text: 'Delete').click
@@ -64,6 +85,32 @@ describe 'authors index', type: :feature, js: true do
     context 'title' do
       it 'has predefined confirmation title' do
         expect(page).to have_css('.active_admin_dialog_mass_update_by_filter', text: 'Delete all?')
+      end
+    end
+
+    context 'summary' do
+      it 'tells how many records are going to be deleted' do
+        expect(page).to have_css('.dialog_records_summary',
+                                 text: "You are going to delete #{Author.count} record(s).")
+      end
+    end
+
+    context 'summary is not loaded yet' do
+      # count request never responds
+      before do
+        page.find('button', text: 'Cancel').click
+        page.execute_script('ActiveAdmin.scopedCollectionRecordsCount = () => $.Deferred().promise()')
+        page.find('#collection_actions_sidebar_section button', text: 'Delete').click
+      end
+
+      it 'shows spinner and does not allow to confirm' do
+        page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+          expect(page).to have_css('.dialog_spinner')
+          expect(page).to_not have_css('.dialog_records_summary')
+          expect(page).to have_button('OK', disabled: true)
+        end
+        expect(page).to_not have_css('.flashes .flash.flash_notice')
+        expect(Author.count).to eq(2)
       end
     end
 
