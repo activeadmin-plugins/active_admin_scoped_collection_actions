@@ -1,3 +1,9 @@
+## Unreleased ##
+
+*   ActiveAdmin 4 support: the dialog is a Flowbite modal in an ES module pinned into `ActiveAdmin.importmap`;
+    ActiveAdmin 3 keeps the jQuery UI dialog
+*   `data-scoped-collection-action` on the sidebar buttons
+
 ## ActiveAdmin Scoped Collection Actions 2.1.0 (October 02, 2026) ##
 
 *   New action option `:confirm_submit` - turns the fields dialog into two steps, the second one replaces the
