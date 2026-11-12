@@ -15,7 +15,7 @@ describe 'confirmation dialog options', type: :feature, js: true do
 
   def fill_update_dialog(last_name)
     page.find('#collection_actions_sidebar_section button', text: 'Update').click
-    page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+    page.within(dialog_css) do
       page.find('input#mass_update_dialog_last_name').click
       page.find('input[name="last_name"]').set(last_name)
       page.find('button', text: 'OK').click
@@ -81,7 +81,7 @@ describe 'confirmation dialog options', type: :feature, js: true do
 
       it 'shows the plain confirmation without a summary' do
         page.find('#collection_actions_sidebar_section button', text: 'Act').click
-        expect(page).to have_css('.active_admin_dialog_mass_update_by_filter', text: 'Act on all?')
+        expect(page).to have_css(dialog_css, text: 'Act on all?')
         # visible: :all - a configured summary is in the DOM from the start, it
         # is only hidden while the spinner waits for the count
         expect(page).to_not have_css('.dialog_records_summary', visible: :all)
@@ -114,7 +114,7 @@ describe 'confirmation dialog options', type: :feature, js: true do
       end
 
       it 'renders unchanged and still lets the action be confirmed' do
-        page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+        page.within(dialog_css) do
           expect(page).to have_css('.dialog_records_summary', text: 'This action needs no numbers.')
           expect(page).to_not have_css('.dialog_spinner')
           expect(page).to have_button('OK', disabled: false)
@@ -133,7 +133,7 @@ describe 'confirmation dialog options', type: :feature, js: true do
       end
 
       it 'falls back to the confirm_action_message translation' do
-        expect(page).to have_css('.active_admin_dialog_confirm_submit', text: 'Are you sure?')
+        expect(page).to have_css(confirm_step_css, text: 'Are you sure?')
         expect(page).to have_css('.dialog_records_summary',
                                  text: 'You are going to update 2 record(s) with:')
       end
@@ -155,7 +155,7 @@ describe 'confirmation dialog options', type: :feature, js: true do
         author = Author.first
         find("#batch_action_item_#{author.id}", visible: true).click
         fill_update_dialog('Smith')
-        expect(page).to have_css('.flashes .flash.flash_notice')
+        expect(page).to have_css(flash_css(:notice))
         expect(author.reload.last_name).to eq('Smith')
       end
     end

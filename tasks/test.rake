@@ -16,5 +16,6 @@ task :setup do
     spec/support/rails_template.rb
   ].join(' ')
 
-  system "bundle exec rails new spec/rails/rails-#{Rails::VERSION::STRING} #{rails_new_args}"
+  rails_root = ENV['RAILS_ROOT'] || "spec/rails/rails-#{Rails::VERSION::STRING}"
+  system "bundle exec rails new #{rails_root} #{rails_new_args}"
 end

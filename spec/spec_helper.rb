@@ -6,7 +6,7 @@ end
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH << File.expand_path('../support', __FILE__)
 
-ENV['BUNDLE_GEMFILE'] = File.expand_path('../../Gemfile', __FILE__)
+ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
 require 'bundler'
 Bundler.setup
 
@@ -14,7 +14,8 @@ ENV['RAILS_ENV'] = 'test'
 # Ensure the Active Admin load path is happy
 require 'rails'
 ENV['RAILS'] = Rails.version
-ENV['RAILS_ROOT'] = File.expand_path("../rails/rails-#{ENV['RAILS']}", __FILE__)
+aa_v4 = Gem.loaded_specs['activeadmin'].version >= Gem::Version.new('4.0.0.beta1')
+ENV['RAILS_ROOT'] = File.expand_path("../rails/rails-#{ENV['RAILS']}#{'-aa4' if aa_v4}", __FILE__)
 
 # Create the test app if it doesn't exists
 system 'rake setup' unless File.exist?(ENV['RAILS_ROOT'])
@@ -40,11 +41,16 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'support/admin'
 require 'support/capybara'
+require 'support/tailwind'
+require 'support/dialog'
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
+  config.include DialogHelpers, type: :feature
+
   config.before(:suite) do
+    Tailwind.compile! if ActiveAdminScopedCollectionActions.aa_v4?
     ActiveRecord::Migration.maintain_test_schema!
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)

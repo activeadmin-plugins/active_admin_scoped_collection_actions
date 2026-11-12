@@ -1,0 +1,40 @@
+require 'spec_helper'
+
+# The ActiveAdmin 4 modal; the shared specs cover what it does with the records.
+describe 'ActiveAdmin 4 dialog', type: :feature, js: true do
+  before do
+    skip 'ActiveAdmin 4 only' unless ActiveAdminScopedCollectionActions.aa_v4?
+
+    Author.create!(name: 'John', last_name: 'Doe')
+    add_author_resource
+    visit '/admin/authors'
+  end
+
+  it 'marks the button, the modal and its form with data attributes' do
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+
+    expect(page).to have_css('[data-scoped-collection-action-modal="scoped_collection_update"]' \
+                             ' form[data-scoped-collection-action-form="scoped_collection_update"]' \
+                             ' [data-scoped-collection-action-field="last_name"]')
+  end
+
+  it 'tells host scripts the dialog opened, with the form in the event detail' do
+    page.execute_script(<<~JS)
+      document.addEventListener('mass_update_modal_dialog:after_open', (event) => {
+        window.openedForm = event.detail.form.dataset.scopedCollectionActionForm
+      })
+    JS
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+
+    expect(page).to have_css(dialog_css)
+    expect(page.evaluate_script('window.openedForm')).to eq('scoped_collection_update')
+  end
+
+  it 'removes the modal on Cancel' do
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+    page.within(dialog_css) { page.find('button', text: 'Cancel').click }
+
+    expect(page).to_not have_css(dialog_css, visible: :all)
+    expect(Author.count).to eq(1)
+  end
+end

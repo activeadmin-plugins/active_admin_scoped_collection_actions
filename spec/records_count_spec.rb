@@ -51,9 +51,8 @@ describe 'affected records count', type: :feature, js: true do
     end
 
     it 'keeps the count action out of the batch actions dropdown' do
-      expect(page).to have_css('.batch_actions_selector')
-      offered = page.all('.batch_actions_selector a.batch_action', visible: :all)
-                    .map { |link| link['data-action'] }
+      expect(page).to have_css(batch_actions_dropdown_css)
+      offered = batch_actions_dropdown_links.map { |link| link['data-action'] }
       expect(offered).to eq(['destroy'])
     end
   end
