@@ -18,6 +18,13 @@ describe 'ActiveAdmin 4 dialog', type: :feature, js: true do
                              ' [data-scoped-collection-action-field="last_name"]')
   end
 
+  it 'names the modal after its heading' do
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+
+    expect(page).to have_css('[data-scoped-collection-action-modal][aria-labelledby="scoped-collection-action-modal-title"]' \
+                             ' h3#scoped-collection-action-modal-title')
+  end
+
   it 'tells host scripts the dialog opened, with the form in the event detail' do
     page.execute_script(<<~JS)
       document.addEventListener('mass_update_modal_dialog:after_open', (event) => {

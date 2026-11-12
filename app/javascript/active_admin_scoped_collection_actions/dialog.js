@@ -75,7 +75,8 @@ const field = (name, type) => {
     input = element("select", { name, class: INPUT })
     for (const option of type) {
       const [text, value] = Array.isArray(option) ? option : [option, option]
-      input.append(element("option", { value }, text))
+      // ['None', nil]: without a value attribute the browser would submit the label
+      input.append(element("option", { value: value ?? "" }, text))
     }
   } else if (type !== null && typeof type === "object") {
     // {type: 'text', class: 'my-widget'}: a plain input carrying the host's
@@ -134,13 +135,14 @@ const openDialog = (button) => {
     id: "scoped-collection-action-modal",
     tabindex: "-1",
     "aria-hidden": "true",
+    "aria-labelledby": "scoped-collection-action-modal-title",
     class: "fixed inset-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto h-full max-h-full",
     "data-scoped-collection-action-modal": batchAction,
     "data-step": "fields"
   })
   const dialog = element("div", { class: "relative w-full max-w-md max-h-full" })
   const content = element("div", { class: "relative bg-white rounded-lg shadow dark:bg-gray-800 dark:border dark:border-white/10 px-6 py-6 lg:px-8" })
-  const title = element("h3", { class: "mb-4 text-xl font-medium text-gray-900 dark:text-white", "data-scoped-collection-action-title": "" }, data.confirm)
+  const title = element("h3", { id: "scoped-collection-action-modal-title", class: "mb-4 text-xl font-medium text-gray-900 dark:text-white", "data-scoped-collection-action-title": "" }, data.confirm)
   const form = element("form", { "data-scoped-collection-action-form": batchAction })
   const fields = element("ul", { "data-scoped-collection-action-fields": "" })
   const footer = element("div", { class: "mt-6 flex justify-end gap-2" })
@@ -187,7 +189,9 @@ const openDialog = (button) => {
 
   cancel.addEventListener("click", () => modal.hide())
 
+  let submitted = false
   const submit = () => {
+    submitted = true
     const changes = formChanges(form)
     footer.replaceChildren(element("span", { class: "text-sm text-gray-700 dark:text-gray-300" }, "Processing. Please wait..."))
     post(token, batchAction, changes)
@@ -229,14 +233,14 @@ const openDialog = (button) => {
     fields.hidden = true
     fields.after(step)
     cancel.replaceWith(back)
-    title.textContent = confirmSubmit.title || fieldsTitle
+    title.textContent = confirmSubmit.title
     modalEl.dataset.step = "confirm"
     waitFor(request)
   }
 
   form.addEventListener("submit", (event) => {
     event.preventDefault()
-    if (waiting) return
+    if (waiting || submitted) return
 
     if (modalEl.dataset.step === "confirm") return submit()
 
@@ -256,5 +260,7 @@ document.addEventListener("click", (event) => {
   if (!button) return
 
   event.preventDefault()
+  // Enter on the still-focused button would stack a second modal with the same ids
+  if (document.getElementById("scoped-collection-action-modal")) return
   openDialog(button)
 })

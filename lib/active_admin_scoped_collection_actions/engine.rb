@@ -11,7 +11,11 @@ module ActiveAdminScopedCollectionActions
         next unless ActiveAdmin.respond_to?(:importmap) && app.config.respond_to?(:importmap)
 
         ActiveAdmin.importmap.draw(root.join('config', 'importmap.rb'))
-        app.config.assets.paths << root.join('app/javascript') if app.config.respond_to?(:assets)
+        if app.config.respond_to?(:assets)
+          app.config.assets.paths << root.join('app/javascript')
+          # Sprockets raises AssetNotPrecompiledError for modules outside its precompile list.
+          app.config.assets.precompile += %w[active_admin_scoped_collection_actions/dialog.js]
+        end
         if ActiveAdmin.application.respond_to?(:importmap_watches)
           ActiveAdmin.application.importmap_watches << root.join('app/javascript')
         end
