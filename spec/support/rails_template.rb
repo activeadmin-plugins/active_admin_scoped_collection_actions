@@ -15,6 +15,9 @@ inject_into_file "app/models/post.rb", "  validates_presence_of :author\n", afte
 inject_into_file "app/models/author.rb",
   "  def self.ransackable_attributes(auth_object = nil)\n" \
   "    [\"name\", \"last_name\", \"birthday\"]\n" \
+  "  end\n" \
+  "  def self.ransackable_associations(auth_object = nil)\n" \
+  "    []\n" \
   "  end\n",
   after: "ApplicationRecord\n"
 

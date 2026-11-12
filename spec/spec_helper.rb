@@ -26,6 +26,10 @@ require 'action_view'
 require 'active_admin'
 ActiveAdmin.application.load_paths = [ENV['RAILS_ROOT'] + '/app/admin']
 require ENV['RAILS_ROOT'] + '/config/environment.rb'
+# Rails 8 draws routes lazily unless eager_load is on (the generated test.rb
+# enables it only when CI is set). ActiveAdmin adds batch actions to resources
+# while drawing them, and the specs register resources before any request.
+Rails.application.reload_routes!
 # Disabling authentication in specs so that we don't have to worry about
 # it allover the place
 ActiveAdmin.application.authentication_method = false
