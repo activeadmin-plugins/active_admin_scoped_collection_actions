@@ -51,10 +51,18 @@ module ActiveAdminScopedCollectionActions
 
     def scoped_collection_actions_sidebar_section
       ActiveAdmin::SidebarSection.new :collection_actions, only: :index, if: scoped_collection_sidebar_condition do
+        aa_v4 = ActiveAdminScopedCollectionActions.aa_v4?
 
-        div I18n.t('active_admin_scoped_collection_actions.sidebar_msg')
+        if aa_v4
+          # ActiveAdmin 4 no longer wraps sidebar sections in a panel.
+          div I18n.t('active_admin_scoped_collection_actions.sidebar_msg'), class: 'mb-3 text-sm text-gray-700 dark:text-gray-300'
+        else
+          div I18n.t('active_admin_scoped_collection_actions.sidebar_msg')
+        end
 
-        active_admin_config.scoped_collection_actions.each do |key, options={}|
+        buttons = div(class: 'flex flex-wrap gap-2', 'data-scoped-collection-actions': '') if aa_v4
+
+        actions = active_admin_config.scoped_collection_actions.each do |key, options={}|
           next if options.key?(:if) && !call_method_or_exec_proc(options[:if])
 
           b_title = options.fetch(:title, ::ActiveSupport::Inflector.humanize(key))
@@ -62,6 +70,9 @@ module ActiveAdminScopedCollectionActions
           b_options[:class] = options[:class] if options[:class].present?
           # Important: If user did not specify html_class, then use default
           b_options[:class] = 'scoped_collection_action_button' unless b_options[:class]
+          b_options[:class] += ' action-item-button cursor-pointer' if aa_v4 && options[:class].blank?
+          b_options[:type] = 'button'
+          b_options['data-scoped-collection-action'] = key.to_s
           b_data = { auth_token: form_authenticity_token.to_s }
           b_data[:batch_action] = key.to_s
           if options[:form].present?
@@ -82,8 +93,14 @@ module ActiveAdminScopedCollectionActions
             b_data[:confirm_summary] = confirm_summary.is_a?(String) ? confirm_summary : I18n.t("active_admin_scoped_collection_actions.#{default_key}")
           end
           b_options[:data] = b_data.to_json
-          button b_title, b_options
+          if aa_v4
+            within(buttons) { button b_title, b_options }
+          else
+            button b_title, b_options
+          end
         end
+        # ActiveAdmin 4 prints a block result that is not an Arbre element.
+        aa_v4 ? buttons : actions
       end
     end
 
