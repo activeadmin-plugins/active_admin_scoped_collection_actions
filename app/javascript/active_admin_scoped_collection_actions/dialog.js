@@ -118,6 +118,10 @@ const checkedChanges = (form) =>
 const formChanges = (form) => {
   const changes = {}
   for (const [name, value] of new FormData(form)) changes[name] = value
+  // FormData skips an unchecked box, but the confirm step shows it as false
+  for (const input of form.querySelectorAll('input[type="checkbox"][name]:not(:disabled):not(:checked)')) {
+    changes[input.name] = "off"
+  }
   return changes
 }
 
@@ -189,7 +193,11 @@ const openDialog = (button) => {
 
   cancel.addEventListener("click", () => modal.hide())
 
+  // Escape and the backdrop call hide() too; once the action is sent the modal
+  // stays until the page reloads.
   let submitted = false
+  const hide = modal.hide.bind(modal)
+  modal.hide = () => { if (!submitted) hide() }
   const submit = () => {
     submitted = true
     const changes = formChanges(form)
@@ -252,6 +260,7 @@ const openDialog = (button) => {
 
   document.body.dispatchEvent(new CustomEvent("mass_update_modal_dialog:before_open", { bubbles: true, detail: { form } }))
   modal.show()
+  form.querySelector("input:not(:disabled), select:not(:disabled), button:not(:disabled)")?.focus()
   document.body.dispatchEvent(new CustomEvent("mass_update_modal_dialog:after_open", { bubbles: true, detail: { form } }))
 }
 

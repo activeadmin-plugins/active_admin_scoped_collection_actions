@@ -12,7 +12,7 @@ module DialogHelpers
 
   # The dialog while it shows the second step of :confirm_submit.
   def confirm_step_css
-    aa_v4? ? '[data-scoped-collection-action-modal][data-step="confirm"]' : 'body>.active_admin_dialog_confirm_submit'
+    aa_v4? ? '[data-scoped-collection-action-modal][data-step="confirm"]' : 'body>.active_admin_dialog_mass_update_by_filter.active_admin_dialog_confirm_submit'
   end
 
   def flash_css(type)

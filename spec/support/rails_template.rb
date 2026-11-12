@@ -56,7 +56,7 @@ if aa_v4
   # How the README tells a host without javascript_modules to load the module.
   html_head = File.read(File.join(activeadmin.full_gem_path, "app/views/active_admin/_html_head.html.erb"))
   create_file "app/views/active_admin/_html_head.html.erb",
-              html_head + "<%= javascript_import_module_tag \"active_admin_scoped_collection_actions\" %>\n"
+    html_head + "<%= javascript_import_module_tag \"active_admin_scoped_collection_actions\" %>\n"
 else
   inject_into_file "app/assets/stylesheets/active_admin.scss",
                    "@import \"active_admin_scoped_collection_actions\";\n",

@@ -14,15 +14,15 @@ describe 'ActiveAdmin 4 dialog', type: :feature, js: true do
     page.find('[data-scoped-collection-action="scoped_collection_update"]').click
 
     expect(page).to have_css('[data-scoped-collection-action-modal="scoped_collection_update"]' \
-                             ' form[data-scoped-collection-action-form="scoped_collection_update"]' \
-                             ' [data-scoped-collection-action-field="last_name"]')
+      ' form[data-scoped-collection-action-form="scoped_collection_update"]' \
+      ' [data-scoped-collection-action-field="last_name"]')
   end
 
   it 'names the modal after its heading' do
     page.find('[data-scoped-collection-action="scoped_collection_update"]').click
 
     expect(page).to have_css('[data-scoped-collection-action-modal][aria-labelledby="scoped-collection-action-modal-title"]' \
-                             ' h3#scoped-collection-action-modal-title')
+      ' h3#scoped-collection-action-modal-title')
   end
 
   it 'tells host scripts the dialog opened, with the form in the event detail' do
@@ -43,5 +43,22 @@ describe 'ActiveAdmin 4 dialog', type: :feature, js: true do
 
     expect(page).to_not have_css(dialog_css, visible: :all)
     expect(Author.count).to eq(1)
+  end
+
+  it 'moves focus into the modal' do
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+
+    expect(page).to have_css("#{dialog_css} input:focus")
+  end
+
+  it 'keeps the modal open on Escape once the action is sent' do
+    page.find('[data-scoped-collection-action="scoped_collection_update"]').click
+    expect(page).to have_css(dialog_css)
+    page.execute_script('window.fetch = () => new Promise(() => {})')
+    page.within(dialog_css) { page.find('button', text: 'OK').click }
+    expect(page).to have_css(dialog_css, text: 'Processing')
+    page.find('body').send_keys(:escape)
+
+    expect(page).to have_css(dialog_css, text: 'Processing')
   end
 end

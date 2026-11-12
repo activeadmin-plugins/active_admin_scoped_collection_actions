@@ -16,8 +16,10 @@ module ActiveAdminScopedCollectionActions
           # Sprockets raises AssetNotPrecompiledError for modules outside its precompile list.
           app.config.assets.precompile += %w[active_admin_scoped_collection_actions/dialog.js]
         end
-        if ActiveAdmin.application.respond_to?(:importmap_watches)
-          ActiveAdmin.application.importmap_watches << root.join('app/javascript')
+        # ActiveAdmin's sweeper watches only its own app/javascript; replace it so
+        # an edited dialog.js gets a fresh digest in development too.
+        if app.config.importmap.sweep_cache
+          ActiveAdmin.importmap.cache_sweeper(watches: [ActiveAdmin::Engine.root.join('app/javascript'), root.join('app/javascript')])
         end
       end
 
