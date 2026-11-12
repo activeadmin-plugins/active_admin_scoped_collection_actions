@@ -63,13 +63,13 @@ describe 'affected records count under authorization', type: :feature, js: true 
 
     it 'refuses the action itself' do
       page.find('#collection_actions_sidebar_section button', text: 'Delete').click
-      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+      page.within(dialog_css) do
         page.find('button', text: 'OK').click
       end
       # Not asserting the wording: no_permissions_msg is looked up under
       # .actions. while en.yml keeps it at the top level, so the flash is
       # currently a "Translation missing" sentence. Predates this branch.
-      expect(page).to have_css('.flashes .flash.flash_error')
+      expect(page).to have_css(flash_css(:error))
       expect(Author.count).to eq(3)
     end
   end

@@ -1,0 +1,21 @@
+source 'https://rubygems.org'
+gemspec path: '..'
+
+default_rails_version = '8.1.0'
+
+gem 'rails', "~> #{ENV['RAILS'] || default_rails_version}"
+gem 'activeadmin', '4.0.0.beta23'
+gem 'propshaft'
+gem 'importmap-rails'
+gem 'tailwindcss-ruby', '~> 4.0'
+
+group :test do
+  gem 'simplecov', require: false
+  gem 'rspec-rails'
+  gem 'sqlite3', '~> 2.0'
+  gem 'database_cleaner'
+  gem 'capybara'
+  gem 'cuprite'
+  gem 'draper'
+  gem 'webrick', require: false
+end
