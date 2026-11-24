@@ -68,7 +68,7 @@ const field = (name, type) => {
   const id = `mass_update_dialog_${name}`
   const item = element("li", { class: "mt-3", "data-scoped-collection-action-field": name })
   const toggle = element("input", { type: "checkbox", class: `mass_update_protect_fild_flag ${CHECKBOX}`, value: "Y", id })
-  const label = element("label", { for: id, class: "ms-2 text-sm font-medium text-gray-900 dark:text-white" }, name.charAt(0).toUpperCase() + name.slice(1))
+  const label = element("label", { for: id, id: `${id}_label`, class: "ms-2 text-sm font-medium text-gray-900 dark:text-white" }, name.charAt(0).toUpperCase() + name.slice(1))
   let input
 
   if (Array.isArray(type)) {
@@ -93,6 +93,8 @@ const field = (name, type) => {
     throw new Error(`Unsupported input type: {${name}: ${type}}`)
   }
 
+  // The label's `for` names the checkbox, so the value control needs its own link
+  input.setAttribute("aria-labelledby", label.id)
   input.disabled = true
   toggle.addEventListener("change", () => { input.disabled = !toggle.checked })
   item.append(toggle, label, input)
@@ -187,11 +189,15 @@ const openDialog = (button) => {
       setTimeout(() => {
         modal.destroyAndRemoveInstance()
         modalEl.remove()
+        button.focus()
       })
     }
   }, { id: modalEl.id, override: true })
 
   cancel.addEventListener("click", () => modal.hide())
+
+  const focusFirstControl = () =>
+    form.querySelector("input:not(:disabled), select:not(:disabled), button:not(:disabled)")?.focus()
 
   // Escape and the backdrop call hide() too; once the action is sent the modal
   // stays until the page reloads.
@@ -236,6 +242,7 @@ const openDialog = (button) => {
       fields.hidden = false
       title.textContent = fieldsTitle
       modalEl.dataset.step = "fields"
+      focusFirstControl()
     })
 
     fields.hidden = true
@@ -260,7 +267,7 @@ const openDialog = (button) => {
 
   document.body.dispatchEvent(new CustomEvent("mass_update_modal_dialog:before_open", { bubbles: true, detail: { form } }))
   modal.show()
-  form.querySelector("input:not(:disabled), select:not(:disabled), button:not(:disabled)")?.focus()
+  focusFirstControl()
   document.body.dispatchEvent(new CustomEvent("mass_update_modal_dialog:after_open", { bubbles: true, detail: { form } }))
 }
 
