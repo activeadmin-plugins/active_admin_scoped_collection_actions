@@ -1,4 +1,4 @@
-## Unreleased ##
+## ActiveAdmin Scoped Collection Actions 2.2.0 (November 27, 2026) ##
 
 *   ActiveAdmin 4 support: the dialog is a Flowbite modal in an ES module pinned into `ActiveAdmin.importmap`;
     ActiveAdmin 3 keeps the jQuery UI dialog
