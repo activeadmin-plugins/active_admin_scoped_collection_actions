@@ -18,8 +18,11 @@ describe 'authors index', type: :feature, js: true do
   context 'show scoped collection action in sidebar' do
 
     it 'page has collection_actions_sidebar_section' do
-      expect(page.find('#collection_actions_sidebar_section'))
-          .to have_css('h3', text: 'Collection Actions')
+      # ActiveAdmin 4 renders sidebar sections without a titled panel
+      unless aa_v4?
+        expect(page.find('#collection_actions_sidebar_section'))
+            .to have_css('h3', text: 'Collection Actions')
+      end
       expect(page.find('#collection_actions_sidebar_section'))
           .to have_css('button', text: 'Update')
       expect(page.find('#collection_actions_sidebar_section'))
@@ -38,18 +41,17 @@ describe 'authors index', type: :feature, js: true do
       @today = Date.today
 
       page.find('#collection_actions_sidebar_section button', text: 'Update').click
-      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+      page.within(dialog_css) do
         page.find('input#mass_update_dialog_birthday').click
-        page.find('input[name="birthday"]').click
       end
-      page.find('.ui-datepicker .ui-datepicker-days-cell-over.ui-datepicker-today', visible: true).click
-      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+      pick_today('birthday')
+      page.within(dialog_css) do
         page.find('button', text: 'OK').click
       end
     end
 
     it 'new birthday was set for all authors' do
-      expect(page).to have_css('.flashes .flash.flash_notice')
+      expect(page).to have_css(flash_css(:notice))
       expect(Author.all.map(&:birthday).uniq.count).to eq(1)
       expect(Author.take.birthday).to eq(@today)
     end
@@ -64,7 +66,7 @@ describe 'authors index', type: :feature, js: true do
     before do
       find("#batch_action_item_#{author.id}", visible: true).click
       page.find('#collection_actions_sidebar_section button', text: 'Update').click
-      page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+      page.within(dialog_css) do
         page.find('input#mass_update_dialog_last_name').click
         page.find('input[name="last_name"].my-widget').set(new_last_name)
         page.find('button', text: 'OK').click
@@ -72,7 +74,7 @@ describe 'authors index', type: :feature, js: true do
     end
 
     it 'new last name was set for checked author' do
-      expect(page).to have_css('.flashes .flash.flash_notice')
+      expect(page).to have_css(flash_css(:notice))
       expect(author.reload.last_name).to eq(new_last_name)
     end
   end
@@ -84,7 +86,7 @@ describe 'authors index', type: :feature, js: true do
 
     context 'title' do
       it 'has predefined confirmation title' do
-        expect(page).to have_css('.active_admin_dialog_mass_update_by_filter', text: 'Delete all?')
+        expect(page).to have_css(dialog_css, text: 'Delete all?')
       end
     end
 
@@ -99,30 +101,30 @@ describe 'authors index', type: :feature, js: true do
       # count request never responds
       before do
         page.find('button', text: 'Cancel').click
-        page.execute_script('ActiveAdmin.scopedCollectionRecordsCount = () => $.Deferred().promise()')
+        stall_records_count
         page.find('#collection_actions_sidebar_section button', text: 'Delete').click
       end
 
       it 'shows spinner and does not allow to confirm' do
-        page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+        page.within(dialog_css) do
           expect(page).to have_css('.dialog_spinner')
           expect(page).to_not have_css('.dialog_records_summary')
           expect(page).to have_button('OK', disabled: true)
         end
-        expect(page).to_not have_css('.flashes .flash.flash_notice')
+        expect(page).to_not have_css(flash_css(:notice))
         expect(Author.count).to eq(2)
       end
     end
 
     context 'action' do
       before do
-        page.within ('body>.active_admin_dialog_mass_update_by_filter') do
+        page.within(dialog_css) do
           page.find('button', text: 'OK').click
         end
       end
 
       it 'delete all authors' do
-        expect(page).to have_css('.flashes .flash.flash_notice')
+        expect(page).to have_css(flash_css(:notice))
         expect(Author.count).to eq(0)
       end
     end
@@ -137,13 +139,13 @@ describe 'authors index', type: :feature, js: true do
       # click "Delete batch"
       find('#collection_actions_sidebar_section button', text: 'Delete').click
       # confirm deletion
-      within 'body > .active_admin_dialog_mass_update_by_filter' do
+      within dialog_css do
         find('button', text: 'OK').click
       end
     end
 
     it 'delete only cheked author' do
-      expect(page).to have_css('.flashes .flash.flash_notice')
+      expect(page).to have_css(flash_css(:notice))
       expect(Author.count).to eq(1)
       expect(Author.take.id).not_to eq(delete_author.id)
       expect(page).to have_css("#batch_action_item_#{Author.take.id}")

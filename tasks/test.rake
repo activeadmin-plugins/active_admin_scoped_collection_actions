@@ -16,5 +16,8 @@ task :setup do
     spec/support/rails_template.rb
   ].join(' ')
 
-  system "bundle exec rails new spec/rails/rails-#{Rails::VERSION::STRING} #{rails_new_args}"
+  # Keep in step with spec_helper, which names the ActiveAdmin 4 app apart.
+  aa_v4 = Gem.loaded_specs['activeadmin'].version >= Gem::Version.new('4.0.0.beta1')
+  rails_root = ENV['RAILS_ROOT'] || "spec/rails/rails-#{Rails::VERSION::STRING}#{'-aa4' if aa_v4}"
+  system "bundle exec rails new #{rails_root} #{rails_new_args}"
 end

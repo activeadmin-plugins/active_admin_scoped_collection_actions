@@ -13,6 +13,8 @@ Plugin for ActiveAdmin. Provides batch Update and Delete for scoped_collection (
 
 - [Description](#description)
 - [Installation](#installation)
+  - [ActiveAdmin 3](#activeadmin-3)
+  - [ActiveAdmin 4](#activeadmin-4)
 - [Usage](#usage)
   - [Update action](#update-action)
 - [Custom actions](#custom-actions)
@@ -51,6 +53,8 @@ And then execute:
 bundle
 ```
 
+### ActiveAdmin 3
+
 Add the following line at the end of `app/assets/javascript/active_admin.js`:
 
 ```javascript
@@ -62,6 +66,49 @@ Also include the CSS in `app/assets/stylesheets/active_admin.css.scss`:
 ```scss
 @import "active_admin_scoped_collection_actions";
 ```
+
+### ActiveAdmin 4
+
+The gem pins its dialog module, `active_admin_scoped_collection_actions`, into `ActiveAdmin.importmap`. The dialog is
+a Flowbite modal, the one ActiveAdmin 4 ships with.
+
+Import the module on ActiveAdmin pages:
+
+- With an ActiveAdmin that has the `javascript_modules` setting
+  ([activeadmin/activeadmin#9148](https://github.com/activeadmin/activeadmin/pull/9148)), the gem adds it there and
+  there is nothing to do.
+- With active_admin_theme 4, add it to the theme's list in `config/initializers/active_admin.rb`:
+
+  ```ruby
+  ActiveAdminTheme.javascripts += %w[active_admin_scoped_collection_actions]
+  ```
+
+- Otherwise copy `app/views/active_admin/_html_head.html.erb` from ActiveAdmin into your app and add at its end:
+
+  ```erb
+  <%= javascript_import_module_tag "active_admin_scoped_collection_actions" %>
+  ```
+
+The sidebar and the modal are styled with Tailwind classes, so Tailwind has to scan the gem. Add it to `content` in
+`tailwind-active_admin.config.js`:
+
+```javascript
+const scopedCollectionActionsPath = execSync('bundle show active_admin_scoped_collection_actions', { encoding: 'utf-8' }).trim().split(/\r?\n/).pop();
+
+export default {
+  content: [
+    // ...
+    `${scopedCollectionActionsPath}/app/javascript/**/*.js`,
+    `${scopedCollectionActionsPath}/lib/**/*.rb`
+  ],
+  // ...
+}
+```
+
+Differences from ActiveAdmin 3:
+
+- `datepicker` fields are native date inputs, as everywhere in ActiveAdmin 4.
+- The sidebar section has no titled panel, because ActiveAdmin 4 renders sidebar sections without one.
 
 ## Usage
 
@@ -128,6 +175,18 @@ $(document).on('mass_update_modal_dialog:after_open', function (event, form) {
   $(form).find('input.my-widget').myWidget();
 });
 ```
+
+On ActiveAdmin 4 the same event is a bubbling DOM `CustomEvent` with the form in `event.detail.form`.
+`mass_update_modal_dialog:before_open` is dispatched the same way, before the modal is shown:
+
+```javascript
+document.addEventListener('mass_update_modal_dialog:after_open', (event) => {
+  event.detail.form.querySelectorAll('input.my-widget').forEach((input) => myWidget(input));
+});
+```
+
+The button, the modal and its form carry `data-scoped-collection-action`, `data-scoped-collection-action-modal`
+and `data-scoped-collection-action-form`, each set to the action name.
 
 ## Custom actions
 
